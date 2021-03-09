@@ -22,7 +22,8 @@ def insert_last():
 @app.route('/delete', methods = ['POST'])
 def delete_first():
     if request.method == 'POST':
+        print('delete-first!')
         front_stack.pop()
         print(front_stack.print_stack())
-        print('delete-first!')
+
     return render_template("index.html")

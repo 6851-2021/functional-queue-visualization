@@ -7,21 +7,26 @@ class Node:
         self.next = next_node
 
 class Stack:
-    def __init__(self, head=None):
-        self.head = head
+    def __init__(self):
+        self.head = None
+        self.size = 0
 
-    def set_head(self, head):
+    def __set_head(self, head):
         self.head = head
     
     def push(self, val):
         new_node = Node(val, self.head)
-        self.set_head(new_node)
+        self.__set_head(new_node)
+        self.size += 1
     
     def pop(self):
-        if self.head is None or self.head.next is None:
+        if self.head is None:
+            return
+        if self.head.next is None:
             self.head = None
         else:
             self.head = self.head.next
+        self.size -= 1
 
     def print_stack(self):
         node = self.head
@@ -40,11 +45,14 @@ class Stack:
         return reversed_stack
     
     def get_size(self): 
+        return self.size
+        """
         count = 0
         node = self.head
-        if node === None: 
+        if node is None: 
             return 0
         while node is not None: 
             count += 1
             node = node.next
         return count 
+        """
