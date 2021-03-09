@@ -38,3 +38,13 @@ class Stack:
             reversed_stack.push(node.val)
             node = node.next
         return reversed_stack
+    
+    def get_size(self): 
+        count = 0
+        node = self.head
+        if node === None: 
+            return 0
+        while node is not None: 
+            count += 1
+            node = node.next
+        return count 
