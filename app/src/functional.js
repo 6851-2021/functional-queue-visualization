@@ -25,9 +25,9 @@ class Stack {
 		return st.size === 0;
 	}
 
-	static listAllElements(st) {
-		if (st.val === null) return [];
-		else return Stack.listAllElements(st.tail).concat([st.val]);
+	listAllElements() {
+		if (this.val === null) return [];
+		else return this.tail.listAllElements().concat([this.val]);
 	}
 }
 
@@ -46,14 +46,14 @@ class Queue {
 		q = Queue.passive(q);
 		if (q.transferOps === 0) {
 			if (Stack.empty(q.INS) && Stack.empty(q.POP)) { // special case: we place first element straight into POP. can we get rid of this?
-				var newPOP = Stack.push(q.POP, val);
+				let newPOP = Stack.push(q.POP, val);
 				return new Queue(q.INS, newPOP);
 			}
-			var newINS = Stack.push(q.INS, val);
+			let newINS = Stack.push(q.INS, val);
 			return new Queue(newINS, q.POP);
 		}
 		else {
-			var newINS2 = Stack.push(q.INS2, val);
+			let newINS2 = Stack.push(q.INS2, val);
 			return new Queue(q.INS, q.POP, q.POPrev, q.POP2, newINS2, q.HEAD, q.transferOps);
 		}
 	}
@@ -61,12 +61,12 @@ class Queue {
 	static pop(q) {
 		q = Queue.passive(q);
 		if (q.transferOps === 0) {
-			var newPOP = Stack.tail(q.POP);
+			let newPOP = Stack.tail(q.POP);
 			return new Queue(q.INS, newPOP);
 		}
 		else {
-			var newTransferOps = q.transferOps - 1;
-			var newHEAD = Stack.tail(q.HEAD);
+			let newTransferOps = q.transferOps - 1;
+			let newHEAD = Stack.tail(q.HEAD);
 			q = new Queue(q.INS, q.POP, q.POPrev, q.POP2, q.INS2, newHEAD, newTransferOps);
 			if (q.transferOps === 0) q = Queue.endTransfer(q);
 			return q;
@@ -87,18 +87,18 @@ class Queue {
 			q = Queue.startTransfer(q);
 		}
 		if (q.transferOps > 0) {
-			var newTransferOps = q.transferOps - 1;
+			let newTransferOps = q.transferOps - 1;
 			if (!Stack.empty(q.INS)) { // first n operations
-				var newINS = Stack.tail(q.INS);
-				var newPOP2 = Stack.push(q.POP2, Stack.head(q.INS));
+				let newINS = Stack.tail(q.INS);
+				let newPOP2 = Stack.push(q.POP2, Stack.head(q.INS));
 				q = new Queue(newINS, q.POP, q.POPrev, newPOP2, q.INS2, q.HEAD, newTransferOps);
-				var newPOP = Stack.tail(q.POP);
-				var newPOPrev = Stack.push(q.POPrev, Stack.head(q.POP));
+				let newPOP = Stack.tail(q.POP);
+				let newPOPrev = Stack.push(q.POPrev, Stack.head(q.POP));
 				q = new Queue(q.INS, newPOP, newPOPrev, q.POP2, q.INS2, q.HEAD, newTransferOps);
 			}
 			else { // remaining n - d operations
-				var newPOPrev = Stack.tail(q.POPrev);
-				var newPOP2 = Stack.push(q.POP2, Stack.head(q.POPrev));
+				let newPOPrev = Stack.tail(q.POPrev);
+				let newPOP2 = Stack.push(q.POP2, Stack.head(q.POPrev));
 				q = new Queue(q.INS, q.POP, newPOPrev, newPOP2, q.INS2, q.HEAD, newTransferOps);
 			}
 			if (q.transferOps === 0) {
@@ -109,55 +109,27 @@ class Queue {
 	}
 
 	static startTransfer(q) {
-		var newTransferOps = 2 * Stack.size(q.POP);
-		var newHEAD = q.POP;
+		let newTransferOps = 2 * Stack.size(q.POP);
+		let newHEAD = q.POP;
 		return new Queue(q.INS, q.POP, q.POPrev, q.POP2, q.INS2, newHEAD, newTransferOps); // handle details about when passive runs.
 	}
 
 	static endTransfer(q) {
-		var newPOP = q.POP2;
-		var newINS = q.INS2;
+		let newPOP = q.POP2;
+		let newINS = q.INS2;
 		return new Queue(newINS, newPOP);
 	}
 
 	static print(q) {
-		console.log("INS:", Stack.listAllElements(q.INS));
-		console.log("POP:", Stack.listAllElements(q.POP));
-		console.log("POPrev:", Stack.listAllElements(q.POPrev));
-		console.log("POP2:", Stack.listAllElements(q.POP2));
-		console.log("INS2:", Stack.listAllElements(q.INS2));
-		console.log("HEAD:", Stack.listAllElements(q.HEAD));
+		console.log("INS:", q.INS.listAllElements());
+		console.log("POP:", q.POP.listAllElements());
+		console.log("POPrev:", q.POPrev.listAllElements());
+		console.log("POP2:", q.POP2.listAllElements());
+		console.log("INS2:", q.INS2.listAllElements());
+		console.log("HEAD:", q.HEAD.listAllElements());
 		console.log("Transfer Ops:", q.transferOps);
 	}
 
-
 }
 
-// q = new Queue();
-// push = (val) => {console.log("pushing", val); q = Queue.push(q, val); /*Queue.print(q);*/ console.log();};
-// head = () => {console.log("head"); console.log(Queue.head(q)); console.log();};
-// pop = () => {console.log("popping"); q = Queue.pop(q); /*Queue.print(q);*/ console.log();};
-
-// push(3);
-// head(); // 3
-// pop();
-// push(5);
-// push(7);
-// push(9);
-// push(11);
-// head(); // 5
-// pop();
-// head(); //7
-// pop();
-// push(12); 
-// head(); // 9
-// push(15);
-// head(); // 9
-// pop();
-// head(); // 11
-// pop();
-// head(); //12
-// pop();
-// head(); // 15
-
-export {Queue}
+export { Stack, Queue }

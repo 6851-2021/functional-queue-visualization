@@ -1,3 +1,11 @@
 .App {
   text-align: center;
 }
+
+.inputs {
+  margin: 5px; 
+}
+
+.functions {
+  margin-bottom: 50px; 
+}
