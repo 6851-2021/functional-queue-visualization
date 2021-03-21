@@ -1,3 +1,3 @@
-run using `flask run`
+cd into `/app` and run using `yarn start`. you may need to run `npm install` if it complains about package dependencies.
 
-not much functionality so far. can add to the back stack and see the updated queue in your terminal. deleting pops from the front stack (which is empty.)
+basic functionality so far: can insert and delete & see the 6 stacks we have update.
