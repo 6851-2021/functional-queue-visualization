@@ -1,6 +1,7 @@
 import React from 'react'; 
 import './App.css';
 import { Queue } from './functional'; 
+import { ArrowLeftOutlined } from '@ant-design/icons';
 
 class App extends React.Component {
   
@@ -36,6 +37,8 @@ class App extends React.Component {
   }
 
   render() {
+    let stackArr = [this.state.q.INS, this.state.q.POP, this.state.q.POPrev, this.state.q.POP2, this.state.q.INS2, this.state.q.HEAD];
+    let stackNames = ['INS stack', 'POP stack', 'POPrev stack', 'POP2 stack', 'INS2 stack', 'HEAD stack'];
     return (
       <div className="App">
         <h1>Functional Queue Implementation</h1>
@@ -50,12 +53,14 @@ class App extends React.Component {
         <button onClick={this.pop}>Delete</button>
         </div>
 
-        {'INS stack: ' + this.state.q.INS.listAllElements()}<br></br>
-        {'POP stack: ' + this.state.q.POP.listAllElements()}<br></br>
-        {'POPrev stack: ' + this.state.q.POPrev.listAllElements()}<br></br>
-        {'POP2 stack: ' + this.state.q.POP2.listAllElements()}<br></br>
-        {'INS2 stack: ' + this.state.q.INS2.listAllElements()}<br></br>
-        {'HEAD stack: ' + this.state.q.HEAD.listAllElements()}<br></br>
+        {stackArr.map((s, j) => 
+          <div className="stackDiv">
+            {stackNames[j]}: {s.listAllElements().map((e, i) => 
+              i > 0 ? <><ArrowLeftOutlined /><div className="element">{e}</div></> : 
+                      <div className="element"> {e}</div>
+            )}
+          </div>
+        )}
       </div>
     );
   }
