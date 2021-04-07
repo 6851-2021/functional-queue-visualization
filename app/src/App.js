@@ -1,31 +1,36 @@
 import React from 'react'; 
 import './App.css';
 import { Queue } from './functional'; 
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 
 class App extends React.Component {
   
   constructor(props) {
     super(props); 
-    this.state = {value: '', q: new Queue()};
+    this.state = {value: '', queues: [Queue.emptyQueue()], parent: [-1], cur: 0};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  push = (val) => {
-    console.log("pushing", val); 
-    this.setState({value: val, q: Queue.push(this.state.q, val)}); 
-  };
+  updateQueue = (q) => {
+		const queues = this.state.queues.concat([q]);
+		const parent = this.state.parent.concat([this.state.cur]);
+		this.setState({value: "", queues: queues, parent: parent, cur: queues.length - 1});	
+	}
 
-  head = () => {
-    console.log("head"); 
-    console.log(Queue.head(this.state.q)); 
-  };
+	curQueue = () => {
+		return this.state.queues[this.state.cur];
+	}
+	
+  push = (val) => {
+    const q = Queue.push(this.curQueue(), val);
+  	this.updateQueue(q);
+	};
 
   pop = () => {
-    console.log("popping"); 
-    this.setState({q: Queue.pop(this.state.q)});
-  };
+		const q = Queue.pop(this.curQueue());
+  	this.updateQueue(q);
+	};
 
   handleSubmit(event) {
     event.preventDefault();
@@ -37,9 +42,30 @@ class App extends React.Component {
   }
 
   render() {
-    let stackArr = [this.state.q.INS, this.state.q.POP, this.state.q.POPrev, this.state.q.POP2, this.state.q.INS2, this.state.q.HEAD];
-    let stackNames = ['INS stack', 'POP stack', 'POPrev stack', 'POP2 stack', 'INS2 stack', 'HEAD stack'];
-    return (
+		const q = this.curQueue();
+   	const stackArr = [q.INS, q.POP, q.POPrev, q.POP2, q.INS2, q.HEAD];
+    const stackNames = ['INS stack', 'POP stack', 'POPrev stack', 'POP2 stack', 'INS2 stack', 'HEAD stack'];
+    const stacks = stackArr.map((s, j) => 
+          <div className="stackDiv">
+            {stackNames[j]}: {s.listAllElements().map((e, i) => 
+              i > 0 ? <><ArrowLeftOutlined /><div className="element">{e}</div></> : 
+                      <div className="element"> {e}</div>
+            )}
+          </div>
+        );	
+		let versions = [];
+		for (let i = 0; i < this.state.queues.length; i++) {
+				const q = this.state.queues[i];
+				const spanClass = "version-ref" + (i == this.state.cur ? ' current' : '');
+				const version =
+						<div key={i}>
+							<span className={spanClass} onClick={() => this.setState({cur: i})}>
+								Q<sub>{i}</sub> {/*Queue.listAllElements(q).join(", ")*/} (Size {Queue.size(q)}) 
+							</span>
+						</div>;
+				versions.push(version);
+		}
+		return (
       <div className="App">
         <h1>Functional Queue Implementation</h1>
         <div className="functions">
@@ -53,14 +79,17 @@ class App extends React.Component {
         <button onClick={this.pop}>Delete</button>
         </div>
 
-        {stackArr.map((s, j) => 
-          <div className="stackDiv">
-            {stackNames[j]}: {s.listAllElements().map((e, i) => 
-              i > 0 ? <><ArrowLeftOutlined /><div className="element">{e}</div></> : 
-                      <div className="element"> {e}</div>
-            )}
-          </div>
-        )}
+				<div className="stacks">
+					<h2> Stacks </h2>
+					{stacks}
+					Head: {Queue.head(this.curQueue())}
+				</div>
+				<br />
+				<div className="history">
+					<h2> Versions </h2>
+					<br />
+					{versions}
+				</div>
       </div>
     );
   }

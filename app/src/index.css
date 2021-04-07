@@ -24,3 +24,16 @@ code {
 .stackDiv {
   margin: 5px; 
 }
+
+.version-ref {
+	color: blue;
+}
+
+.version-ref:hover {
+	cursor: pointer;
+}
+
+.version-ref.current {
+	color: red;
+	font-weight: bold;
+}
