@@ -56,11 +56,17 @@ class App extends React.Component {
 		let versions = [];
 		for (let i = 0; i < this.state.queues.length; i++) {
 				const q = this.state.queues[i];
-				const spanClass = "version-ref" + (i == this.state.cur ? ' current' : '');
+				let ancs = [];
+				let temp = this.state.parent[this.state.cur];
+				while (temp !== -1) {
+					ancs.push(temp);
+					temp = this.state.parent[temp];
+				}
+				const spanClass = "version-ref" + (i == this.state.cur ? ' current' : '') + (ancs.includes(i) ? ' parent' : '');
 				const version =
 						<div key={i}>
 							<span className={spanClass} onClick={() => this.setState({cur: i})}>
-								Q<sub>{i}</sub> {/*Queue.listAllElements(q).join(", ")*/} (Size {Queue.size(q)}) 
+								Q<sub>{i}</sub> {/*Queue.listAllElements(q).join(", ")*/} (Size {Queue.size(q)}{Queue.head(q) ? ", Head " + Queue.head(q) : ""}) 
 							</span>
 						</div>;
 				versions.push(version);
