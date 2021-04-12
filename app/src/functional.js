@@ -51,37 +51,44 @@ class Queue {
 		return new Queue(new Stack(), new Stack(), new Stack(), new Stack(), new Stack(), new Stack(), 0, 0);
 	}
 
-	static push(q, val) {
-		console.log(q);
-		q = Queue.passive(q);
-		console.log(q);
+	static push(q, val, moves) {
+		q = Queue.passive(q, moves);
 		let newSize = q.size + 1;
 		if (q.transferOps === 0) {
 			if (Stack.empty(q.INS) && Stack.empty(q.POP)) { // special case: we place first element straight into POP. can we get rid of this?
-				let newPOP = Stack.push(q.POP, val);
-				return Queue.normalQueue(q.INS, newPOP, newSize);
+				let newPOP = Stack.push(q.POP, val); // PUSH
+				q = Queue.normalQueue(q.INS, newPOP, newSize);
+				moves.push(q);
+				return q;
 			}
-			let newINS = Stack.push(q.INS, val);
-			return Queue.normalQueue(newINS, q.POP, newSize);
+			let newINS = Stack.push(q.INS, val); // PUSH
+			q = Queue.normalQueue(newINS, q.POP, newSize);
+			moves.push(q);
+			return q;
 		}
 		else {
-			let newINS2 = Stack.push(q.INS2, val);
-			return new Queue(q.INS, q.POP, q.POPrev, q.POP2, newINS2, q.HEAD, q.transferOps, newSize);
+			let newINS2 = Stack.push(q.INS2, val); // PUSH
+			q = new Queue(q.INS, q.POP, q.POPrev, q.POP2, newINS2, q.HEAD, q.transferOps, newSize);
+			moves.push(q);
+			return q;
 		}
 	}
 
-	static pop(q) {
-		q = Queue.passive(q);
+	static pop(q, moves) {
+		q = Queue.passive(q, moves);
 		let newSize = q.size - 1;
 		if (q.transferOps === 0) {
-			let newPOP = Stack.tail(q.POP);
-			return Queue.normalQueue(q.INS, newPOP, newSize);
+			let newPOP = Stack.tail(q.POP); // POP
+			q = Queue.normalQueue(q.INS, newPOP, newSize);
+			moves.push(q);
+			return q;
 		}
 		else {
 			let newTransferOps = q.transferOps - 1;
-			let newHEAD = Stack.tail(q.HEAD);
+			let newHEAD = Stack.tail(q.HEAD); // POP
 			q = new Queue(q.INS, q.POP, q.POPrev, q.POP2, q.INS2, newHEAD, newTransferOps, newSize);
-			if (q.transferOps === 0) q = Queue.endTransfer(q);
+			moves.push(q);
+			if (q.transferOps === 0) q = Queue.endTransfer(q, moves);
 			return q;
 		}
 	}
@@ -95,42 +102,49 @@ class Queue {
 		}
 	}
 
-	static passive(q) {
-		if (q.transferOps === 0 && Stack.size(q.INS) === Stack.size(q.POP)) {
-			q = Queue.startTransfer(q);
+	static passive(q, moves) {
+		if (q.transferOps === 0 && Stack.size(q.INS) === Stack.size(q.POP) && Stack.size(q.INS) > 0) {
+			q = Queue.startTransfer(q, moves);
 		}
 		if (q.transferOps > 0) {
 			let newTransferOps = q.transferOps - 1;
 			if (!Stack.empty(q.INS)) { // first n operations
 				let newINS = Stack.tail(q.INS);
-				let newPOP2 = Stack.push(q.POP2, Stack.head(q.INS));
+				let newPOP2 = Stack.push(q.POP2, Stack.head(q.INS)); // FLIP INS onto POP2
 				q = new Queue(newINS, q.POP, q.POPrev, newPOP2, q.INS2, q.HEAD, newTransferOps, q.size);
+				moves.push(q);
 				let newPOP = Stack.tail(q.POP);
-				let newPOPrev = Stack.push(q.POPrev, Stack.head(q.POP));
+				let newPOPrev = Stack.push(q.POPrev, Stack.head(q.POP)); // FLIP POP onto POPrev
 				q = new Queue(q.INS, newPOP, newPOPrev, q.POP2, q.INS2, q.HEAD, newTransferOps, q.size);
+				moves.push(q);
 			}
 			else { // remaining n - d operations
 				let newPOPrev = Stack.tail(q.POPrev);
-				let newPOP2 = Stack.push(q.POP2, Stack.head(q.POPrev));
+				let newPOP2 = Stack.push(q.POP2, Stack.head(q.POPrev)); // FLIP POPrev onto POP2
 				q = new Queue(q.INS, q.POP, newPOPrev, newPOP2, q.INS2, q.HEAD, newTransferOps, q.size);
+				moves.push(q);
 			}
 			if (q.transferOps === 0) {
-				q = Queue.endTransfer(q);
+				q = Queue.endTransfer(q, moves);
 			}
 		}
 		return q;
 	}
 
-	static startTransfer(q) {
+	static startTransfer(q, moves) {
 		let newTransferOps = 2 * Stack.size(q.POP);
-		let newHEAD = q.POP;
-		return new Queue(q.INS, q.POP, q.POPrev, q.POP2, q.INS2, newHEAD, newTransferOps, q.size); // handle details about when passive runs.
+		let newHEAD = q.POP; // ASSIGN HEAD TO POP
+		q = new Queue(q.INS, q.POP, q.POPrev, q.POP2, q.INS2, newHEAD, newTransferOps, q.size);
+		moves.push(q);
+		return q;
 	}
 
-	static endTransfer(q) {
-		let newPOP = q.POP2;
-		let newINS = q.INS2;
-		return Queue.normalQueue(newINS, newPOP, q.size);
+	static endTransfer(q, moves) {
+		let newPOP = q.POP2; // ASSIGN POP to POP2
+		let newINS = q.INS2; // ASSIGN INS to INS2
+		q = Queue.normalQueue(newINS, newPOP, q.size);
+		moves.push(q);
+		return q;
 	}
 
 	static size(q) {
@@ -157,5 +171,29 @@ class Queue {
 	}
 
 }
+
+
+// queue array thing for each operation:
+// 
+// list of queues for each operation, go from one to another with a simple operation, and provide what that simple operation is
+//
+// each actual operation, push and pop, consists of a few simple operations:
+//
+// pop from stack: fade out
+// push from stack: basically what already happens
+// swap two stacks: highlight stacks, e.g. orange and blue box
+// splitting up a big operation into simple ones and doing the simple ones one-by-one: how? user should be able to control speed somehow, in the future maybe helpful messages for each simple operation?
+//
+// miscellaneous visual things:
+// 
+// alignment: left-alignment makes most sense because everything is stationary except for new element
+// showing INS, POP, etc. as pointers / highlighted elements instead of labels (maybe?)
+// things shouldn't contradict the "hidden model" with all the pointers and elements that ever existed (this is very vague)
+//
+// versions:
+//
+// show parent arrows somehow
+// maybe look for a library that still looks minimalistic
+//
 
 export { Stack, Queue }
