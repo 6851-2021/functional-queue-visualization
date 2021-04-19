@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  margin: auto;
+  width: fit-content;
 }
 
 .inputs {
@@ -8,4 +10,48 @@
 
 .functions {
   margin-bottom: 50px; 
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.element {
+  width: 20px;
+  height: 20px;
+  border: 1px solid;
+  display: inline-block;
+  margin: 5px; 
+  padding: 3px;
+}
+
+.stackDiv {
+  margin: 5px; 
+}
+
+.version-ref {
+	color: grey;
+}
+
+.version-ref:hover {
+	cursor: pointer;
+}
+
+.version-ref.current {
+	color: blue;
+	font-weight: bold;
+}
+
+.version-ref.parent {
+	color: blue;
 }
