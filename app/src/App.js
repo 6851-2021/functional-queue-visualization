@@ -16,7 +16,7 @@ class App extends React.Component {
   
   constructor(props) {
     super(props); 
-    this.state = {value: '', queues: [Queue.emptyQueue()], parent: [-1], cur: 0, move: Queue.emptyQueue()};
+    this.state = {value: '', queues: [Queue.emptyQueue()], parent: [-1], cur: 0, move: {new_queue: Queue.emptyQueue(), move: "", stacks: []}};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -68,8 +68,8 @@ class App extends React.Component {
   }
 
   render() {
-    // const q = this.curQueue();
-    const q = this.state.move;
+    //const q = this.curQueue();
+    const q = this.state.move.new_queue;
     console.log('q: ', q); 
    	const stackArr = [q.INS, q.POP, q.POPrev, q.POP2, q.INS2, q.HEAD];
     const stackNames = ['INS stack', 'POP stack', 'POPrev stack', 'POP2 stack', 'INS2 stack', 'HEAD stack'];
