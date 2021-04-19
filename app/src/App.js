@@ -16,24 +16,21 @@ class App extends React.Component {
   
   constructor(props) {
     super(props); 
-    this.state = {value: '', queues: [Queue.emptyQueue()], parent: [-1], cur: 0};
+    this.state = {value: '', queues: [Queue.emptyQueue()], parent: [-1], cur: 0, move: Queue.emptyQueue()};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-
-  push = (val) => {
-    console.log("pushing", val); 
-    let originalQ = this.state.q; 
-    this.setState({value: val, q: Queue.push(this.state.q, val)}); 
-    // let transArr = getTransition or gaurav's function --> [[], [], []]..
-    // showSteps(originalQ, transArr)
-  };
 
   updateQueue = (q, moves) => {
   	const queues = this.state.queues.concat([q]);
 		const parent = this.state.parent.concat([this.state.cur]);
 		console.log("changes one-by-one", moves);
-		this.setState({value: "", queues: queues, parent: parent, cur: queues.length - 1});	
+    // call this later
+    for (let move of moves) {
+      this.setState({value: "", queues: queues, parent: parent, cur: queues.length - 1, move: move});	
+      console.log("in for loop", move);
+      setTimeout(() => {}, 2000); 
+    }
 	}
 
 	curQueue = () => {
@@ -41,13 +38,15 @@ class App extends React.Component {
 	}
 	
   push = (val) => {
-		const moves = [];
+		const moves = [this.curQueue()];
+    // let curQueue = this.curQueue(); 
     const q = Queue.push(this.curQueue(), val, moves);
   	this.updateQueue(q, moves);
 	};
 
   pop = () => {
-		const moves = [];
+		const moves = [this.curQueue()];
+    // let curQueue = this.curQueue(); 
 		const q = Queue.pop(this.curQueue(), moves);
   	this.updateQueue(q, moves);
 	};
@@ -61,12 +60,17 @@ class App extends React.Component {
     this.setState({value: event.target.value});
   }
 
-  showSteps(ogQ, arr) {
+  showStep(ogQ, newQ, descriptor) {
     // TODO
+    if (descriptor === "push") {
+      
+    }
   }
 
   render() {
-    const q = this.curQueue();
+    // const q = this.curQueue();
+    const q = this.state.move;
+    console.log('q: ', q); 
    	const stackArr = [q.INS, q.POP, q.POPrev, q.POP2, q.INS2, q.HEAD];
     const stackNames = ['INS stack', 'POP stack', 'POPrev stack', 'POP2 stack', 'INS2 stack', 'HEAD stack'];
     const stacks = stackArr.map((s, j) => 
