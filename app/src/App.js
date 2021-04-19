@@ -29,9 +29,10 @@ class App extends React.Component {
     // showSteps(originalQ, transArr)
   };
 
-  updateQueue = (q) => {
-		const queues = this.state.queues.concat([q]);
+  updateQueue = (q, moves) => {
+  	const queues = this.state.queues.concat([q]);
 		const parent = this.state.parent.concat([this.state.cur]);
+		console.log("changes one-by-one", moves);
 		this.setState({value: "", queues: queues, parent: parent, cur: queues.length - 1});	
 	}
 
@@ -40,13 +41,15 @@ class App extends React.Component {
 	}
 	
   push = (val) => {
-    const q = Queue.push(this.curQueue(), val);
-  	this.updateQueue(q);
+		const moves = [];
+    const q = Queue.push(this.curQueue(), val, moves);
+  	this.updateQueue(q, moves);
 	};
 
   pop = () => {
-		const q = Queue.pop(this.curQueue());
-  	this.updateQueue(q);
+		const moves = [];
+		const q = Queue.pop(this.curQueue(), moves);
+  	this.updateQueue(q, moves);
 	};
 
   handleSubmit(event) {
