@@ -55,3 +55,7 @@ code {
 .version-ref.parent {
 	color: blue;
 }
+
+.hidden {
+	display: none;
+}
