@@ -7,9 +7,8 @@ import './App.css';
 
 class SingleMove extends React.Component {
 	constructor(props) {
-        console.log('in constructor');
         super(props); 
-        this.state = {hidden: "hidden", loaded: false}
+        this.state = {hidden: "hidden"}
     }
 
 	async componentDidMount() {
@@ -21,11 +20,10 @@ class SingleMove extends React.Component {
         console.log(that.props);
         this.setState({loaded: true});
 	}
-
-    hidePrevMove = () => {
-        if (document.getElementById(this.props.id-1)) {
-            console.log('here & now hiding id: ', this.props.id-1);
-            document.getElementById(this.props.id-1).style.visibility = "hidden";
+    componentDidUpdate() {
+        var that = this;
+        if (document.getElementById(that.props.id-1)) {
+            document.getElementById(that.props.id-1).style.display = "none"; 
         }
     }
 
@@ -38,23 +36,20 @@ class SingleMove extends React.Component {
 	}
 
     render() {
-        if (this.state.loaded) {
-            return (
-                <div className={this.state.hidden} id={this.props.id}>
-                    {this.props.stackArr.map((s, j) => 
-                        <div className="stackDiv">
-                            {this.props.stackNames[j]}: {s.listAllElements().map((e, i) => 
-                            i > 0 ? <><ArrowLeftOutlined /><div className="element">{e}</div></> : 
-                                    <div className="element"> {e}</div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            )
-        } else {
-            return (<h1>Loading...</h1>)
-        }    
-    }
+        return (
+            <div className={this.state.hidden} id={this.props.id}>
+                {this.props.stackArr.map((s, j) => 
+                    <div className="stackDiv">
+                        {this.props.stackNames[j]}: {s.listAllElements().map((e, i) => 
+                        i > 0 ? <><ArrowLeftOutlined /><div className="element">{e}</div></> : 
+                                <div className="element"> {e}</div>
+                        )}
+                    </div>
+                )}
+            </div>
+        )
+    } 
+        
 }
 
 export { SingleMove }
