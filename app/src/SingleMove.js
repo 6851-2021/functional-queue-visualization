@@ -7,30 +7,20 @@ import './App.css';
 class SingleMove extends React.Component {
 	constructor(props) {
         super(props); 
-        this.state = {hidden: "hidden", display_state:"hide-initial"}
+        this.state = {hidden: "hidden"}
     }
 
 	componentDidMount() {
         var that = this;
 		setTimeout(function() {
-            // if (that.props && that.props.prevMove) {
-            //     console.log('prevMove: ', that.props.prevMove); 
-            //     let pMove = that.props.prevMove;
-            //     pMove.hide(); 
-            // }           
 			that.show();
-            //that.setState({display_state:"show"});
 		}, that.props.wait);
-        console.log(that.props);
 	}
 
     componentDidUpdate() {
         var that = this;
-        if (document.getElementById(that.props.id-1)) {//&& this.state.display_state === "show") {
-            console.log('here & now hiding id ', that.props.id-1); 
-            // console.log(document.getElementById(that.props.id-1).style); 
+        if (document.getElementById(that.props.id-1)) {
             document.getElementById(that.props.id-1).style.display = "none"; 
-            //that.setState({display_state:"hide"});
         }
     }
 

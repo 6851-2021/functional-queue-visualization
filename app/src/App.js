@@ -64,7 +64,7 @@ class App extends React.Component {
         const queue = move.new_queue; 
         const stackArr = [queue.INS, queue.POP, queue.POPrev, queue.POP2, queue.INS2, queue.HEAD];
         const stackNames = ['INS stack', 'POP stack', 'POPrev stack', 'POP2 stack', 'INS2 stack', 'HEAD stack'];
-        const new_move = <SingleMove stackArr={stackArr} stackNames={stackNames} wait={1000*i} id={id+1}/>;
+        const new_move = <SingleMove key={"singleMove"+id+1} stackArr={stackArr} stackNames={stackNames} wait={1000*i} id={id+1}/>;
         id = id+1; 
         return (new_move)
       });	
