@@ -5,11 +5,13 @@ import {SingleMove} from "./SingleMove";
 import { Queue } from './functional'; 
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 
+let lastId = -1; 
+
 class App extends React.Component {
   
   constructor(props) {
     super(props); 
-    this.state = {value: '', queues: [Queue.emptyQueue()], parent: [-1], cur: 0, move: {new_queue: Queue.emptyQueue(), move: "", stacks: []}, moves: []};
+    this.state = {value: '', queues: [Queue.emptyQueue()], parent: [-1], cur: 0, moves: []};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -50,13 +52,16 @@ class App extends React.Component {
   }
 
   render() {
+      // let prev_move = <SingleMove stackArr={[]} stackNames={[]} prevMove={<div className=""></div>} wait={0}/>;
       const stacks = this.state.moves.map((move, i) => {
+
         const queue = move.new_queue; 
         // console.log('queue is', queue);
         const stackArr = [queue.INS, queue.POP, queue.POPrev, queue.POP2, queue.INS2, queue.HEAD];
         const stackNames = ['INS stack', 'POP stack', 'POPrev stack', 'POP2 stack', 'INS2 stack', 'HEAD stack'];
-      
-        return (<SingleMove stackArr={stackArr} stackNames={stackNames} wait={1000*i}/>)
+        const new_move = <SingleMove stackArr={stackArr} stackNames={stackNames} wait={1000*i} id={lastId+1}/>;
+        lastId = lastId+1; 
+        return (new_move)
       });	
 
       let versions = [];
