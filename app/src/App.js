@@ -57,13 +57,14 @@ class App extends React.Component {
       // only increment ids when there are new moves; else keep the old ids
         let id = updated?lastId:lastId-this.state.moves.length;
         const stacks = this.state.moves.map((move, i) => {
-        const queue = move.new_queue; 
-        const stackArr = [queue.INS, queue.POP, queue.POPrev, queue.POP2, queue.INS2, queue.HEAD];
-        const stackNames = ['INS stack', 'POP stack', 'POPrev stack', 'POP2 stack', 'INS2 stack', 'HEAD stack'];
-        const new_move = <SingleMove key={"singleMove"+id+1} stackArr={stackArr} stackNames={stackNames} wait={1000*i} id={id+1}/>;
-        id = id+1; 
-        return (new_move)
-      });	
+          console.log('move: ', move); 
+          const queue = move.new_queue; 
+          const stackArr = [queue.INS, queue.POP, queue.POPrev, queue.POP2, queue.INS2, queue.HEAD];
+          const stackNames = ['INS', 'POP', 'POPrev', 'POP2', 'INS2', 'HEAD'];
+          const new_move = <SingleMove key={"singleMove"+id+1} stackArr={stackArr} stackNames={stackNames} stackChanges={move.stacks} explanation={move.move} newQueue={move.new_queue} wait={3000*i} id={id+1}/>;
+          id = id+1; 
+          return (new_move)
+        });	
       if (updated) {
         console.log("lastId is now ", id);
         lastId = id;
