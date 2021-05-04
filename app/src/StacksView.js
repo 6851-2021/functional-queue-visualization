@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import './App.css';
 import { Stack } from './functional';
 
@@ -44,20 +44,26 @@ class StacksView extends React.Component {
     render() {
         const move = this.props.move;
         const stackNames = this.props.stackNames;
+        const moveNum = this.props.moveNum;
+        const numMoves =  this.props.numMoves;
+        const setMoveNum = this.props.setMoveNum;
         const stacks = stackNames.map(
             (name) => {
                 const s = move.new_queue[name];
-                return (<div className="stackDiv" style={{ backgroundColor: move.stacks.includes(name) ? 'aquamarine' : 'white', height: '40px' }}>
-                    {name} stack: {s.listAllElements().map((e, i) =>
-                        i > 0 ? <><ArrowLeftOutlined /><div className="element">{e}</div></> :
-                            <div className="element"> {e}</div>
-                    )}
-                </div>)
+                return (
+                    <div className="stackDiv" style={{ backgroundColor: move.stacks.includes(name) ? 'aquamarine' : 'white', height: '40px' }}>
+                        {name} stack:
+                        {s.listAllElements().map((e, i) =>
+                            i > 0 ? <><ArrowLeftOutlined /><div className="element">{e}</div></> :
+                                <div className="element"> {e}</div>
+                        )}
+                    </div>)
             }
         );
         return (
             <div className={this.state.hidden}>
-                <p className="explanation">{this.showExplanation()}</p>
+                <StepBackwardOutlined onClick={() => setMoveNum(moveNum - 1)}/> {moveNum + 1}/{numMoves} <StepForwardOutlined onClick={() => setMoveNum(moveNum + 1)}/>
+                <p className="explanation">{this.showExplanation()}</p> 
                 {/* <div className={this.state.hidden2}> */}
                 <div>
                     {stacks}

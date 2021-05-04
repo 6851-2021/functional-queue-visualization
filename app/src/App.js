@@ -8,7 +8,7 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { queues: [Queue.emptyQueue()], parents: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]] };
+        this.state = { queues: [Queue.emptyQueue()], parents: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]],  moveNum: 0};
     }
 
     updateQueue = (q, moves) => {
@@ -16,7 +16,7 @@ class App extends React.Component {
         const ops = this.state.ops.concat([moves]);
         const parents = this.state.parents.concat([this.state.cur]);
         console.log("changes one-by-one", moves);
-        this.setState({ queues: queues, parents: parents, cur: queues.length - 1, ops: ops });
+        this.setState({ queues: queues, parents: parents, cur: queues.length - 1, ops: ops, moveNum: 0});
     }
 
     curQueue = () => {
@@ -45,11 +45,16 @@ class App extends React.Component {
         this.setState({cur: i});
     }
 
+    setMoveNum = (i) => {
+        if (i >= 0 && i < this.curOps().length)
+            this.setState({moveNum: i});
+    }
+
     render() {
         const ops = this.curOps();
-        const move = ops[ops.length - 1];
+        const moveNum = this.state.moveNum;
+        const move = ops[moveNum];
         const stackNames = ['INS', 'POP', 'POPrev', 'POP2', 'INS2', 'HEAD'];
-        const stack = <StacksView move={move} stackNames={stackNames}> </StacksView>
 
         return (
             <div className="App">
@@ -60,9 +65,9 @@ class App extends React.Component {
                 <div className="stacks">
                     <h2> Stacks </h2>
                     <div id="stacksID">
-                        {stack}
+                    <StacksView move={move} stackNames={stackNames} moveNum={moveNum} numMoves={ops.length} setMoveNum={this.setMoveNum}> </StacksView>
                     </div>
-                      Head: {Queue.head(this.curQueue())}
+                    Head: {Queue.head(this.curQueue())}
                 </div>
 
                 <br />
