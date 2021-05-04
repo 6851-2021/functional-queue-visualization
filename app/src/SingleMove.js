@@ -10,12 +10,7 @@ class SingleMove extends React.Component {
 
 	componentDidMount() {
         var that = this;
-        // setTimeout(function () {
-        //     that.show();
-        // }, that.props.wait);
-		// setTimeout(function() {
-		//     that.showLater();
-		// }, that.props.wait);
+
         setTimeout(function () {
             that.show();
         }, that.props.wait);
