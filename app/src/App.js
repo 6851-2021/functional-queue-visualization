@@ -10,9 +10,7 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { value: '', queues: [Queue.emptyQueue()], parent: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]] };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.state = { queues: [Queue.emptyQueue()], parent: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]] };
     }
 
     updateQueue = (q, moves) => {
@@ -20,7 +18,7 @@ class App extends React.Component {
         const ops = this.state.ops.concat([moves]);
         const parent = this.state.parent.concat([this.state.cur]);
         console.log("changes one-by-one", moves);
-        this.setState({ value: "", queues: queues, parent: parent, cur: queues.length - 1, ops: ops });
+        this.setState({ queues: queues, parent: parent, cur: queues.length - 1, ops: ops });
     }
 
     curQueue = () => {
@@ -44,15 +42,6 @@ class App extends React.Component {
         const q = Queue.pop(this.curQueue(), moves);
         this.updateQueue(q, moves);
     };
-
-    handleSubmit(event) {
-        event.preventDefault();
-        this.push(parseInt(this.state.value));
-    }
-
-    handleChange(event) {
-        this.setState({ value: event.target.value });
-    }
 
     render() {
         const ops = this.curOps();
@@ -82,7 +71,10 @@ class App extends React.Component {
         return (
             <div className="App">
                 <h1>Functional Queue Implementation</h1>
-                <div className="functions">
+
+                <Input push={this.push} pop={this.pop}></Input>
+
+                {/* <div className="functions">
                     <form onSubmit={this.handleSubmit}>
                         <label>
                             <input className="inputs" type="text" value={this.state.value} onChange={this.handleChange} />
@@ -91,14 +83,14 @@ class App extends React.Component {
                     </form>
 
                     <button onClick={this.pop}>Delete</button>
-                </div>
+                </div> */}
 
                 <div className="stacks">
                     <h2> Stacks </h2>
                     <div id="stacksID">
                         {stack}
                     </div>
-            Head: {Queue.head(this.curQueue())}
+                      Head: {Queue.head(this.curQueue())}
                 </div>
                 <br />
                 <div className="history" style={{ marginTop: '00px' }}>
