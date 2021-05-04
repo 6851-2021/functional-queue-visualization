@@ -26,7 +26,6 @@ class StacksView extends React.Component {
                 textStr += ' ' + (popVal - 1) + ' from ' + popStack;
                 return textStr;
             case 'BEGIN TRANSFER':
-                textStr = textStr;
                 return textStr;
             case 'FLIP':
                 let stack1 = move.stacks[0];
@@ -34,7 +33,6 @@ class StacksView extends React.Component {
                 textStr += ' stacks ' + stack1 + ' and ' + stack2;
                 return textStr;
             case 'END TRANSFER':
-                textStr = textStr;
                 return textStr;
             case 'CREATE':
                 return textStr;
@@ -46,21 +44,23 @@ class StacksView extends React.Component {
     render() {
         const move = this.props.move;
         const stackNames = this.props.stackNames;
+        const stacks = stackNames.map(
+            (name) => {
+                const s = move.new_queue[name];
+                return (<div className="stackDiv" style={{ backgroundColor: move.stacks.includes(name) ? 'aquamarine' : 'white', height: '40px' }}>
+                    {name} stack: {s.listAllElements().map((e, i) =>
+                        i > 0 ? <><ArrowLeftOutlined /><div className="element">{e}</div></> :
+                            <div className="element"> {e}</div>
+                    )}
+                </div>)
+            }
+        );
         return (
             <div className={this.state.hidden}>
                 <p className="explanation">{this.showExplanation()}</p>
                 {/* <div className={this.state.hidden2}> */}
                 <div>
-                    {stackNames.map((name) => {
-                        const s = move.new_queue[name];
-                        return (<div className="stackDiv" style={{ backgroundColor: move.stacks.includes(name) ? 'aquamarine' : 'white', height: '40px' }}>
-                            {name} stack: {s.listAllElements().map((e, i) =>
-                                i > 0 ? <><ArrowLeftOutlined /><div className="element">{e}</div></> :
-                                    <div className="element"> {e}</div>
-                            )}
-                        </div>)
-                    }
-                    )}
+                    {stacks}
                 </div>
             </div>
         )

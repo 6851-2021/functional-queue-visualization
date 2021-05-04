@@ -1,24 +1,22 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './App.css';
 import { Input } from "./Input";
 import { StacksView } from "./StacksView";
 import { Queue } from './functional';
 import { Versions } from './Versions';
-import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { queues: [Queue.emptyQueue()], parent: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]] };
+        this.state = { queues: [Queue.emptyQueue()], parents: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]] };
     }
 
     updateQueue = (q, moves) => {
         const queues = this.state.queues.concat([q]);
         const ops = this.state.ops.concat([moves]);
-        const parent = this.state.parent.concat([this.state.cur]);
+        const parents = this.state.parents.concat([this.state.cur]);
         console.log("changes one-by-one", moves);
-        this.setState({ queues: queues, parent: parent, cur: queues.length - 1, ops: ops });
+        this.setState({ queues: queues, parents: parents, cur: queues.length - 1, ops: ops });
     }
 
     curQueue = () => {
@@ -43,47 +41,21 @@ class App extends React.Component {
         this.updateQueue(q, moves);
     };
 
+    setVersion = (i) => {
+        this.setState({cur: i});
+    }
+
     render() {
         const ops = this.curOps();
         const move = ops[ops.length - 1];
         const stackNames = ['INS', 'POP', 'POPrev', 'POP2', 'INS2', 'HEAD'];
         const stack = <StacksView move={move} stackNames={stackNames}> </StacksView>
 
-        let versions = [];
-        for (let i = 0; i < this.state.queues.length; i++) {
-            const q = this.state.queues[i];
-            let ancs = [];
-            let temp = this.state.parent[this.state.cur];
-            while (temp !== -1) {
-                ancs.push(temp);
-                temp = this.state.parent[temp];
-            }
-            const spanClass = "version-ref" + (i == this.state.cur ? ' current' : '') + (ancs.includes(i) ? ' parent' : '');
-            const version =
-                <div key={i}>
-                    <span className={spanClass} onClick={() => this.setState({ cur: i })}>
-                        Q<sub>{i}</sub> {/*Queue.listAllElements(q).join(", ")*/} (Size {Queue.size(q)}{Queue.head(q) ? ", Head " + Queue.head(q) : ""})
-                </span>
-                </div>;
-            versions.push(version);
-        }
-
         return (
             <div className="App">
                 <h1>Functional Queue Implementation</h1>
 
                 <Input push={this.push} pop={this.pop}></Input>
-
-                {/* <div className="functions">
-                    <form onSubmit={this.handleSubmit}>
-                        <label>
-                            <input className="inputs" type="text" value={this.state.value} onChange={this.handleChange} />
-                        </label>
-                        <input className="inputs" type="submit" value="Insert" />
-                    </form>
-
-                    <button onClick={this.pop}>Delete</button>
-                </div> */}
 
                 <div className="stacks">
                     <h2> Stacks </h2>
@@ -92,12 +64,15 @@ class App extends React.Component {
                     </div>
                       Head: {Queue.head(this.curQueue())}
                 </div>
+
                 <br />
+
                 <div className="history" style={{ marginTop: '00px' }}>
                     <h2> Versions </h2>
                     <br />
-                    {versions}
+                    <Versions queues={this.state.queues} parents={this.state.parents} cur={this.state.cur} setVersion={this.setVersion}></Versions>
                 </div>
+
             </div>
         );
     }
