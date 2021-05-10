@@ -31,7 +31,7 @@ class Input extends React.Component {
             <div className="functions">
                 <form onSubmit={this.handlePush}>
                     <label>
-                        <input className="inputs" type="text" value={this.state.value} onChange={this.handleChange} maxLength="2"/>
+                        <input className="inputs" type="text" value={this.state.value} onChange={this.handleChange} maxLength="2" minLength="1"/>
                     </label>
                     <input className="inputs" type="submit" value="Insert" />
                 </form>

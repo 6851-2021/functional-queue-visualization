@@ -9,7 +9,7 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { queues: [Queue.emptyQueue()], parents: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]],  moveNum: 0, speed: "manual"};
+        this.state = { queues: [Queue.emptyQueue()], parents: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]],  moveNum: 0, speed: "auto"};
     }
 
     updateQueue = (q, moves) => {
@@ -19,13 +19,15 @@ class App extends React.Component {
         console.log("changes one-by-one", moves);
         const num_moves = moves.length;
         this.setState({ queues: queues, parents: parents, cur: queues.length - 1, ops: ops, moveNum: (this.state.speed == "end" ? num_moves - 1: 0)});
+        clearInterval(this.interval);
+        if (this.state.speed == "auto") this.runAuto();
     }
 
     curQueue = () => {
         return this.state.queues[this.state.cur];
     }
 
-    curOps = () => {
+    curOp = () => {
         return this.state.ops[this.state.cur];
     }
 
@@ -47,19 +49,43 @@ class App extends React.Component {
         this.setState({cur: i});
     }
 
+    // only should be called for button presses, not internally
     setMoveNum = (i) => {
-        if (i >= 0 && i < this.curOps().length)
+        if (i >= 0 && i < this.curOp().length) {
             this.setState({moveNum: i});
+            clearInterval(this.interval);
+        }
     }
 
     setSpeed = (speed) => {
         this.setState({speed: speed});
+        
+        const numMoves = this.curOp().length;
+	    if (speed == "end") this.setState({moveNum: numMoves - 1});
+        else if (speed == "auto") {
+            this.runAuto();
+        }
+    }
+
+    runAuto = () => {
+        const handleInterval = () => {
+            console.log("running");
+            const numMoves = this.curOp().length;
+            const moveNum = this.state.moveNum;
+            if (moveNum + 1 < numMoves) {
+                this.setState({moveNum: moveNum + 1});
+                if (moveNum + 2 >= numMoves) {
+                    clearInterval(this.interval);
+                }
+            }
+        };
+        this.interval = setInterval(handleInterval, 500);
     }
 
     render() {
-        const ops = this.curOps();
+        const op = this.curOp();
         const moveNum = this.state.moveNum;
-        const move = ops[moveNum];
+        const move = op[moveNum];
 
         return (
             <div className="App">
@@ -70,7 +96,7 @@ class App extends React.Component {
                 <div className="stacks">
                     <h2> Stacks </h2>
                     <div id="stacksID">
-                    <StacksView move={move} moveNum={moveNum} numMoves={ops.length} setMoveNum={this.setMoveNum} setSpeed={this.setSpeed}> </StacksView>
+                    <StacksView move={move} moveNum={moveNum} numMoves={op.length} setMoveNum={this.setMoveNum} setSpeed={this.setSpeed}> </StacksView>
                     </div>
                 </div>
 

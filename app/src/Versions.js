@@ -12,7 +12,6 @@ class Versions extends React.Component {
             ancs.push(temp);
             temp = this.props.parents[temp];
         }
-        console.log("ancs", ancs);
         for (let i = 0; i < this.props.queues.length; i++) {
             const q = this.props.queues[i];
             const spanClass = "version-ref" + (i === this.props.cur ? ' current' : '') + (ancs.includes(i) ? ' parent' : '');
@@ -24,7 +23,6 @@ class Versions extends React.Component {
                 </div>;
             versions.push(version);
         }
-        console.log(versions);
         return (
             <div>
                 {versions}
