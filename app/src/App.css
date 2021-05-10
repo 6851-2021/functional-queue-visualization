@@ -47,6 +47,9 @@ code {
 
 .stackDiv {
   margin: 5px; 
+  width: 700px; 
+  overflow-x: scroll;
+  white-space: nowrap;
 }
 
 .version-ref {

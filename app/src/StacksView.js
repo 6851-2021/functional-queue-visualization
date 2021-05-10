@@ -60,7 +60,7 @@ class StacksView extends React.Component {
                 const s = move.new_queue[name];
                 const nameHTML = stackNamesHTML[name];
                 return (
-                    <div className="stackDiv" style={{ backgroundColor: move.stacks.includes(name) ? 'aquamarine' : 'white', height: '40px' }}>
+                    <div className="stackDiv" style={{ backgroundColor: move.stacks.includes(name) ? 'aquamarine' : 'white', height: '40px', textAlign: 'right' }}>
                         <div className="element-null">&bull;</div>
                         {s.listAllElements().map((e, i) =>
                             <><ArrowLeftOutlined /><div className="element">{e}</div></>
@@ -86,7 +86,7 @@ class StacksView extends React.Component {
         return (
             <div>
                 {move_number}
-                <p className="explanation">{this.showExplanation()}</p>
+                <p className="explanation" style={{height: '25px'}}>{this.showExplanation()}</p>
                 {/* <div className={this.state.hidden2}> */}
                 <div>
                     {stacks}
