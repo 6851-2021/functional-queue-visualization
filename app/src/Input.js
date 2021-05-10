@@ -14,7 +14,7 @@ class Input extends React.Component {
 
     handlePush(event) {
         event.preventDefault();
-        this.props.push(parseInt(this.state.value));
+        this.props.push(this.state.value);
         this.setState({value: ''});
     }
 
@@ -31,7 +31,7 @@ class Input extends React.Component {
             <div className="functions">
                 <form onSubmit={this.handlePush}>
                     <label>
-                        <input className="inputs" type="text" value={this.state.value} onChange={this.handleChange} />
+                        <input className="inputs" type="text" value={this.state.value} onChange={this.handleChange} maxLength="2"/>
                     </label>
                     <input className="inputs" type="submit" value="Insert" />
                 </form>
