@@ -96,7 +96,7 @@ class App extends React.Component {
                 <div className="stacks">
                     <h2> Stacks </h2>
                     <div id="stacksID">
-                    <StacksView move={move} moveNum={moveNum} numMoves={op.length} setMoveNum={this.setMoveNum} setSpeed={this.setSpeed}> </StacksView>
+                    <StacksView move={move} moveNum={moveNum} numMoves={op.length} setMoveNum={this.setMoveNum} setSpeed={this.setSpeed} speed={this.state.speed}> </StacksView>
                     </div>
                 </div>
 
