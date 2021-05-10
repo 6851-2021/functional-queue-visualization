@@ -15,6 +15,7 @@ class StacksView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
+        this.onSpeedChange = this.onSpeedChange.bind(this);
     }
 
     showExplanation = () => {
@@ -23,17 +24,17 @@ class StacksView extends React.Component {
             case 'PUSH':
                 let pushStack = move.stacks[0];
                 console.log(move.new_queue[pushStack]);
-                return (<>Push {move.val} onto <span class="stack-name-expl">{stackNamesHTML[pushStack]}</span></>);
+                return (<>Push {move.val} onto <span className="stack-name-expl">{stackNamesHTML[pushStack]}</span></>);
             case 'POP':
                 let popStack = move.stacks[0];
                 let popVal = Stack.head(move.new_queue[popStack]);
-                return (<>Pop {move.val} from <span class="stack-name-expl">{stackNamesHTML[popStack]}</span></>);
+                return (<>Pop {move.val} from <span className="stack-name-expl">{stackNamesHTML[popStack]}</span></>);
             case 'BEGIN TRANSFER':
                 return (<>Enter transfer mode</>)
             case 'FLIP':
                 let stack1 = move.stacks[0];
                 let stack2 = move.stacks[1];
-                return (<>Move {move.val} from <span class="stack-name-expl">{stackNamesHTML[stack1]}</span> to <span class="stack-name-expl">{stackNamesHTML[stack2]}</span></>);
+                return (<>Move {move.val} from <span className="stack-name-expl">{stackNamesHTML[stack1]}</span> to <span className="stack-name-expl">{stackNamesHTML[stack2]}</span></>);
             case 'END TRANSFER':
                 return (<>End transfer mode</>);
             case 'CREATE':
@@ -41,6 +42,10 @@ class StacksView extends React.Component {
             default:
                 return <>Unknown move</>;
         }
+    }
+
+    onSpeedChange(event) {
+        this.props.setSpeed(event.target.value);
     }
 
     render() {
@@ -60,13 +65,22 @@ class StacksView extends React.Component {
                         {s.listAllElements().map((e, i) =>
                             <><ArrowLeftOutlined /><div className="element">{e}</div></>
                         )}
-                        <ArrowLeftOutlined /> <span class="stack-name">{nameHTML} </span>
+                        <ArrowLeftOutlined /> <span className="stack-name">{nameHTML} </span>
                     </div>)
             }
         );
         const move_number = (
             <div>
                 <StepBackwardOutlined onClick={() => setMoveNum(moveNum - 1)} /> {moveNum + 1}/{numMoves} <StepForwardOutlined onClick={() => setMoveNum(moveNum + 1)} />
+            </div>
+        );
+        const speed_select = (
+            <div id="speed-select-div">
+                Step speed: <select onChange={this.onSpeedChange}>
+                    <option value="manual">Manual</option>
+                    <option value="auto">Automatic (TODO)</option>
+                    <option value="end">Skip to End</option>
+                </select>
             </div>
         );
         return (
@@ -77,6 +91,7 @@ class StacksView extends React.Component {
                 <div>
                     {stacks}
                 </div>
+                {speed_select}
             </div>
         )
     }

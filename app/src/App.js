@@ -4,11 +4,12 @@ import { Input } from "./Input";
 import { StacksView } from "./StacksView";
 import { Queue } from './functional';
 import { Versions } from './Versions';
+import { RightSquareFilled } from '@ant-design/icons';
 class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { queues: [Queue.emptyQueue()], parents: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]],  moveNum: 0};
+        this.state = { queues: [Queue.emptyQueue()], parents: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]],  moveNum: 0, speed: "manual"};
     }
 
     updateQueue = (q, moves) => {
@@ -16,7 +17,8 @@ class App extends React.Component {
         const ops = this.state.ops.concat([moves]);
         const parents = this.state.parents.concat([this.state.cur]);
         console.log("changes one-by-one", moves);
-        this.setState({ queues: queues, parents: parents, cur: queues.length - 1, ops: ops, moveNum: 0});
+        const num_moves = moves.length;
+        this.setState({ queues: queues, parents: parents, cur: queues.length - 1, ops: ops, moveNum: (this.state.speed == "end" ? num_moves - 1: 0)});
     }
 
     curQueue = () => {
@@ -50,6 +52,10 @@ class App extends React.Component {
             this.setState({moveNum: i});
     }
 
+    setSpeed = (speed) => {
+        this.setState({speed: speed});
+    }
+
     render() {
         const ops = this.curOps();
         const moveNum = this.state.moveNum;
@@ -64,7 +70,7 @@ class App extends React.Component {
                 <div className="stacks">
                     <h2> Stacks </h2>
                     <div id="stacksID">
-                    <StacksView move={move} moveNum={moveNum} numMoves={ops.length} setMoveNum={this.setMoveNum}> </StacksView>
+                    <StacksView move={move} moveNum={moveNum} numMoves={ops.length} setMoveNum={this.setMoveNum} setSpeed={this.setSpeed}> </StacksView>
                     </div>
                 </div>
 
