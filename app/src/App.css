@@ -61,7 +61,10 @@ code {
 }
 
 .explanation {
-  font-style: italic;
-  color: blue; 
+  color: red; 
   background-color: white;
+}
+
+#speed-select-div {
+  margin: 15px;
 }

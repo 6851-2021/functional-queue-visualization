@@ -54,20 +54,18 @@ class App extends React.Component {
         const ops = this.curOps();
         const moveNum = this.state.moveNum;
         const move = ops[moveNum];
-        const stackNames = ['INS', 'POP', 'POPrev', 'POP2', 'INS2', 'HEAD'];
 
         return (
             <div className="App">
-                <h1>Functional Queue Implementation</h1>
+                <h1>Functional Queue Visualizer</h1>
 
                 <Input push={this.push} pop={this.pop}></Input>
 
                 <div className="stacks">
                     <h2> Stacks </h2>
                     <div id="stacksID">
-                    <StacksView move={move} stackNames={stackNames} moveNum={moveNum} numMoves={ops.length} setMoveNum={this.setMoveNum}> </StacksView>
+                    <StacksView move={move} moveNum={moveNum} numMoves={ops.length} setMoveNum={this.setMoveNum}> </StacksView>
                     </div>
-                    Head: {Queue.head(this.curQueue())}
                 </div>
 
                 <br />
