@@ -35,6 +35,16 @@ code {
   padding: 3px;
 }
 
+.element-null {
+  width: 10px;
+  height: 20px;
+  display: inline-block;
+  margin: 5px; 
+  padding: 3px;
+  font-size: 15px;
+  line-height: 20px;
+}
+
 .stackDiv {
   margin: 5px; 
 }
@@ -61,10 +71,18 @@ code {
 }
 
 .explanation {
-  color: red; 
+  color: darkgreen; 
   background-color: white;
 }
 
 #speed-select-div {
   margin: 15px;
+}
+
+.stack-name {
+  color: blue;
+}
+
+.stack-name-expl {
+  color: blue;
 }

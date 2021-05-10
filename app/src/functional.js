@@ -58,18 +58,18 @@ class Queue {
 			if (Stack.empty(q.INS) && Stack.empty(q.POP)) { // special case: we place first element straight into POP. can we get rid of this?
 				let newPOP = Stack.push(q.POP, val); // PUSH
 				q = Queue.normalQueue(q.INS, newPOP, newSize);
-				moves.push({new_queue: q, move_type: "PUSH", stacks: ["POP"]});
+				moves.push({new_queue: q, move_type: "PUSH", stacks: ["POP"], val: val});
 				return q;
 			}
 			let newINS = Stack.push(q.INS, val); // PUSH
 			q = Queue.normalQueue(newINS, q.POP, newSize);
-			moves.push({new_queue: q, move_type: "PUSH", stacks: ["INS"]});
+			moves.push({new_queue: q, move_type: "PUSH", stacks: ["INS"], val: val});
 			return q;
 		}
 		else {
 			let newINS2 = Stack.push(q.INS2, val); // PUSH
 			q = new Queue(q.INS, q.POP, q.POPrev, q.POP2, newINS2, q.HEAD, q.transferOps, newSize);
-			moves.push({new_queue: q, move_type: "PUSH", stacks: ["INS2"]});
+			moves.push({new_queue: q, move_type: "PUSH", stacks: ["INS2"], val: val});
 			return q;
 		}
 	}
@@ -79,15 +79,17 @@ class Queue {
 		let newSize = q.size - 1;
 		if (q.transferOps === 0) {
 			let newPOP = Stack.tail(q.POP); // POP
+			let val = Stack.head(q.POP);
 			q = Queue.normalQueue(q.INS, newPOP, newSize);
-			moves.push({new_queue: q, move_type: "POP", stacks: ["POP"]});
+			moves.push({new_queue: q, move_type: "POP", stacks: ["POP"], val: val});
 			return q;
 		}
 		else {
 			let newTransferOps = q.transferOps - 1;
 			let newHEAD = Stack.tail(q.HEAD); // POP
+			let val = Stack.head(q.POP);
 			q = new Queue(q.INS, q.POP, q.POPrev, q.POP2, q.INS2, newHEAD, newTransferOps, newSize);
-			moves.push({new_queue: q, move_type: "POP", stacks: ["HEAD"]});
+			moves.push({new_queue: q, move_type: "POP", stacks: ["HEAD"], val: val});
 			if (q.transferOps === 0) q = Queue.endTransfer(q, moves);
 			return q;
 		}
@@ -112,17 +114,17 @@ class Queue {
 				let newINS = Stack.tail(q.INS);
 				let newPOP2 = Stack.push(q.POP2, Stack.head(q.INS)); // FLIP INS onto POP2
 				q = new Queue(newINS, q.POP, q.POPrev, newPOP2, q.INS2, q.HEAD, newTransferOps, q.size);
-				moves.push({new_queue: q, move_type: "FLIP", stacks: ["INS", "POP2"]});
+				moves.push({new_queue: q, move_type: "FLIP", stacks: ["INS", "POP2"], val: Stack.head(q.POP2)});
 				let newPOP = Stack.tail(q.POP);
 				let newPOPrev = Stack.push(q.POPrev, Stack.head(q.POP)); // FLIP POP onto POPrev
 				q = new Queue(q.INS, newPOP, newPOPrev, q.POP2, q.INS2, q.HEAD, newTransferOps, q.size);
-				moves.push({new_queue: q, move_type: "FLIP", stacks: ["POP", "POPrev"]});
+				moves.push({new_queue: q, move_type: "FLIP", stacks: ["POP", "POPrev"], val: Stack.head(q.POPrev)});
 			}
 			else { // remaining n - d operations
 				let newPOPrev = Stack.tail(q.POPrev);
 				let newPOP2 = Stack.push(q.POP2, Stack.head(q.POPrev)); // FLIP POPrev onto POP2
 				q = new Queue(q.INS, q.POP, newPOPrev, newPOP2, q.INS2, q.HEAD, newTransferOps, q.size);
-				moves.push({new_queue: q, move_type: "FLIP", stacks: ["POPrev", "POP"]});
+				moves.push({new_queue: q, move_type: "FLIP", stacks: ["POPrev", "POP"], val: Stack.head(q.POP)});
 			}
 			if (q.transferOps === 0) {
 				q = Queue.endTransfer(q, moves);

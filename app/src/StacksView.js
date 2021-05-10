@@ -23,19 +23,17 @@ class StacksView extends React.Component {
             case 'PUSH':
                 let pushStack = move.stacks[0];
                 console.log(move.new_queue[pushStack]);
-                let pushVal = Stack.head(move.new_queue[pushStack]);
-                return (<>Push {pushVal} onto {stackNamesHTML[pushStack]}</>);
+                return (<>Push {move.val} onto <span class="stack-name-expl">{stackNamesHTML[pushStack]}</span></>);
             case 'POP':
                 let popStack = move.stacks[0];
                 let popVal = Stack.head(move.new_queue[popStack]);
-                return (<>Pop {popVal} from {stackNamesHTML[popStack]}</>);
+                return (<>Pop {move.val} from <span class="stack-name-expl">{stackNamesHTML[popStack]}</span></>);
             case 'BEGIN TRANSFER':
                 return (<>Enter transfer mode</>)
             case 'FLIP':
                 let stack1 = move.stacks[0];
                 let stack2 = move.stacks[1];
-                let val = Stack.head(move.new_queue[stack2]);
-                return (<>Move {val} from {stackNamesHTML[stack1]} to {stackNamesHTML[stack2]}</>);
+                return (<>Move {move.val} from <span class="stack-name-expl">{stackNamesHTML[stack1]}</span> to <span class="stack-name-expl">{stackNamesHTML[stack2]}</span></>);
             case 'END TRANSFER':
                 return (<>End transfer mode</>);
             case 'CREATE':
@@ -58,11 +56,11 @@ class StacksView extends React.Component {
                 const nameHTML = stackNamesHTML[name];
                 return (
                     <div className="stackDiv" style={{ backgroundColor: move.stacks.includes(name) ? 'aquamarine' : 'white', height: '40px' }}>
-                        {nameHTML}:
+                        <div className="element-null">&bull;</div>
                         {s.listAllElements().map((e, i) =>
-                            i > 0 ? <><ArrowLeftOutlined /><div className="element">{e}</div></> :
-                                <div className="element"> {e}</div>
+                            <><ArrowLeftOutlined /><div className="element">{e}</div></>
                         )}
+                        <ArrowLeftOutlined /> <span class="stack-name">{nameHTML} </span>
                     </div>)
             }
         );
