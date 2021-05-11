@@ -124,7 +124,7 @@ class Queue {
 				let newPOPrev = Stack.tail(q.POPrev);
 				let newPOP2 = Stack.push(q.POP2, Stack.head(q.POPrev)); // FLIP POPrev onto POP2
 				q = new Queue(q.INS, q.POP, newPOPrev, newPOP2, q.INS2, q.HEAD, newTransferOps, q.size);
-				moves.push({new_queue: q, move_type: "FLIP", stacks: ["POPrev", "POP"], val: Stack.head(q.POP)});
+				moves.push({new_queue: q, move_type: "FLIP", stacks: ["POPrev", "POP2"], val: Stack.head(q.POP2)});
 			}
 			if (q.transferOps === 0) {
 				q = Queue.endTransfer(q, moves);

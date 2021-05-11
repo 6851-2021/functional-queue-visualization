@@ -80,9 +80,9 @@ class StacksView extends React.Component {
         );
         const speed_select = (
             <div id="speed-select-div">
-                Step speed: <Select onChange={this.onSpeedChange} defaultValue="manual" style={{ width: 120 }}>
+                Step speed: <Select onChange={this.onSpeedChange} style={{ width: 120 }} value={this.props.speed}>
                     <Option value="manual">Manual</Option>
-                    <Option value="auto">Automatic (TODO)</Option>
+                    <Option value="auto">Automatic</Option>
                     <Option value="end">Skip to End</Option>
                 </Select>
             </div>
