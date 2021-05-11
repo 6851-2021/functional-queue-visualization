@@ -9,7 +9,7 @@ class InputComponent extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { value: '' };
+        this.state = { value: ''};
         this.handleChange = this.handleChange.bind(this);
         this.handlePush = this.handlePush.bind(this);
         this.handlePop = this.handlePop.bind(this);
@@ -46,7 +46,7 @@ class InputComponent extends React.Component {
                     maxLength="2"
                     minLength="1"
                 />
-                <Button type="primary" danger onClick={this.handlePop}>Delete</Button>
+                <Button type="primary" danger onClick={this.handlePop} disabled={this.props.disabled}>Delete</Button>
                 
             </Space>
             </div>

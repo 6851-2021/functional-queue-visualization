@@ -91,7 +91,7 @@ class App extends React.Component {
             <div className="App">
                 <h1>Functional Queue Visualizer</h1>
 
-                <InputComponent push={this.push} pop={this.pop}></InputComponent>
+                <InputComponent push={this.push} pop={this.pop} disabled={this.curQueue().size === 0}></InputComponent>
 
                 <div className="stacks">
                     <h2> Stacks </h2>
