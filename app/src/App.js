@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Input } from "./Input";
+import { InputComponent } from "./Input";
 import { StacksView } from "./StacksView";
 import { Queue } from './functional';
 import { Versions } from './Versions';
@@ -65,7 +65,7 @@ class App extends React.Component {
             <div className="App">
                 <h1>Functional Queue Visualizer</h1>
 
-                <Input push={this.push} pop={this.pop}></Input>
+                <InputComponent push={this.push} pop={this.pop}></InputComponent>
 
                 <div className="stacks">
                     <h2> Stacks </h2>

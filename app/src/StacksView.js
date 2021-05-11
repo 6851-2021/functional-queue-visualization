@@ -2,6 +2,10 @@ import React from 'react';
 import { ArrowLeftOutlined, StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import './App.css';
 import { Stack } from './functional';
+import { Select} from 'antd';
+import "antd/dist/antd.css";
+
+const { Option } = Select;
 
 const stackNames = ['INS', 'POP', 'POPrev', 'POP2', 'INS2', 'HEAD'];
 const stackNamesHTML = {'INS': (<>INS</>),
@@ -44,8 +48,8 @@ class StacksView extends React.Component {
         }
     }
 
-    onSpeedChange(event) {
-        this.props.setSpeed(event.target.value);
+    onSpeedChange(value) {
+        this.props.setSpeed(value);
     }
 
     render() {
@@ -76,11 +80,11 @@ class StacksView extends React.Component {
         );
         const speed_select = (
             <div id="speed-select-div">
-                Step speed: <select onChange={this.onSpeedChange}>
-                    <option value="manual">Manual</option>
-                    <option value="auto">Automatic (TODO)</option>
-                    <option value="end">Skip to End</option>
-                </select>
+                Step speed: <Select onChange={this.onSpeedChange} defaultValue="manual" style={{ width: 120 }}>
+                    <Option value="manual">Manual</Option>
+                    <Option value="auto">Automatic (TODO)</Option>
+                    <Option value="end">Skip to End</Option>
+                </Select>
             </div>
         );
         return (
