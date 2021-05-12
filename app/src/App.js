@@ -40,13 +40,13 @@ class App extends React.Component {
 
     pop = () => {
         const original = { new_queue: this.curQueue(), move_type: "", stacks: [] };
-        const moves = [original];
+        const moves = [];
         const q = Queue.pop(this.curQueue(), moves);
         this.updateQueue(q, moves);
     };
 
     setVersion = (i) => {
-        this.setState({cur: i});
+        this.setState({cur: i, moveNum: this.state.ops[i].length - 1});
     }
 
     // only should be called for button presses, not internally
