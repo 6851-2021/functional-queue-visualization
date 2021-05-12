@@ -2,23 +2,26 @@ import React from 'react';
 import { ArrowLeftOutlined, StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import './App.css';
 import { Stack } from './functional';
-import { Select} from 'antd';
+import { Select } from 'antd';
 import "antd/dist/antd.css";
 
 const { Option } = Select;
 
 const stackNames = ['INS', 'POP', 'POPrev', 'POP2', 'INS2', 'HEAD'];
-const stackNamesHTML = {'INS': (<>INS</>),
-                        'POP': (<>POP</>),
-                        'POPrev': (<>POP<sub>rev</sub></>),
-                        'POP2': (<>POP<sub>2</sub></>),
-                        'INS2': (<>INS<sub>2</sub></>),
-                        'HEAD': (<>HEAD</>)};
+const stackNamesHTML = {
+    'INS': (<>INS</>),
+    'POP': (<>POP</>),
+    'POPrev': (<>POP<sub>rev</sub></>),
+    'POP2': (<>POP<sub>2</sub></>),
+    'INS2': (<>INS<sub>2</sub></>),
+    'HEAD': (<>HEAD</>)
+};
 class StacksView extends React.Component {
-    
+
     constructor(props) {
         super(props);
         this.state = {};
+        this.onStepModeChange = this.onStepModeChange.bind(this);
         this.onSpeedChange = this.onSpeedChange.bind(this);
     }
 
@@ -48,14 +51,18 @@ class StacksView extends React.Component {
         }
     }
 
-    onSpeedChange(value) {
-        this.props.setSpeed(value);
+    onStepModeChange(value) {
+        this.props.setStepMode(value);
+    }
+
+    onSpeedChange(event) {
+        this.props.setSpeed(parseInt(event.target.value));
     }
 
     render() {
         const move = this.props.move;
-        
-        
+
+
         const moveNum = this.props.moveNum;
         const numMoves = this.props.numMoves;
         const setMoveNum = this.props.setMoveNum;
@@ -80,12 +87,16 @@ class StacksView extends React.Component {
         );
         const speed_select = (
             <div id="speed-select-div">
-                Step speed: <Select onChange={this.onSpeedChange} style={{ width: 120 }} value={this.props.speed}>
+                Step mode: <Select onChange={this.onStepModeChange} style={{ width: 120 }} value={this.props.stepMode}>
                     <Option value="manual">Manual</Option>
                     <Option value="auto">Automatic</Option>
                     <Option value="end">Skip to End</Option>
                 </Select>
             </div>
+        );
+        const speed_slider = (<div> 
+            Speed: <input type="range" id="speed-range" value={this.props.speed} onChange={this.onSpeedChange}></input>
+        </div>
         );
         return (
             <div>
@@ -95,7 +106,10 @@ class StacksView extends React.Component {
                 <div>
                     {stacks}
                 </div>
-                {speed_select}
+                <div >
+                    {speed_select}
+                    {this.props.stepMode == "auto" && speed_slider}
+                </div>
             </div>
         )
     }

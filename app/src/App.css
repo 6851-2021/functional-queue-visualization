@@ -27,6 +27,10 @@ code {
     monospace;
 }
 
+#speed-range {
+  vertical-align: middle;
+}
+
 .element {
   width: 30px;
   height: 30px;

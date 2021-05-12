@@ -4,12 +4,12 @@ import { InputComponent } from "./Input";
 import { StacksView } from "./StacksView";
 import { Queue } from './functional';
 import { Versions } from './Versions';
-import { RightSquareFilled } from '@ant-design/icons';
+import { ConsoleSqlOutlined, RightSquareFilled } from '@ant-design/icons';
 class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { queues: [Queue.emptyQueue()], parents: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]],  moveNum: 0, speed: "auto"};
+        this.state = { queues: [Queue.emptyQueue()], parents: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]],  moveNum: 0, stepMode: "auto", speed: 50};
     }
 
     updateQueue = (q, moves) => {
@@ -18,9 +18,9 @@ class App extends React.Component {
         const parents = this.state.parents.concat([this.state.cur]);
         console.log("changes one-by-one", moves);
         const num_moves = moves.length;
-        this.setState({ queues: queues, parents: parents, cur: queues.length - 1, ops: ops, moveNum: (this.state.speed == "end" ? num_moves - 1: 0)});
+        this.setState({ queues: queues, parents: parents, cur: queues.length - 1, ops: ops, moveNum: (this.state.stepMode == "end" ? num_moves - 1: 0)});
         clearInterval(this.interval);
-        if (this.state.speed == "auto") this.runAuto();
+        if (this.state.stepMode == "auto") this.runAuto();
     }
 
     curQueue = () => {
@@ -57,14 +57,19 @@ class App extends React.Component {
         }
     }
 
-    setSpeed = (speed) => {
-        this.setState({speed: speed});
+    setStepMode = (stepMode) => {
+        this.setState({stepMode: stepMode});
         
         const numMoves = this.curOp().length;
-	    if (speed == "end") this.setState({moveNum: numMoves - 1});
-        else if (speed == "auto") {
+	    if (stepMode == "end") this.setState({moveNum: numMoves - 1});
+        else if (stepMode == "auto") {
             this.runAuto();
         }
+    }
+
+    setSpeed = (speed) => {
+        this.setState({speed: speed});
+        console.log("new speed: ", speed);
     }
 
     runAuto = () => {
@@ -74,12 +79,15 @@ class App extends React.Component {
             const moveNum = this.state.moveNum;
             if (moveNum + 1 < numMoves) {
                 this.setState({moveNum: moveNum + 1});
-                if (moveNum + 2 >= numMoves) {
-                    clearInterval(this.interval);
-                }
+            }
+            if (moveNum + 2 >= numMoves) {
+                clearInterval(this.interval);
             }
         };
-        this.interval = setInterval(handleInterval, 500);
+        const speed = this.state.speed;
+        const x = 10 + speed;
+        const waittime = 50000/x;
+        this.interval = setInterval(handleInterval, waittime);
     }
 
     render() {
@@ -96,7 +104,7 @@ class App extends React.Component {
                 <div className="stacks">
                     <h2> Stacks </h2>
                     <div id="stacksID">
-                    <StacksView move={move} moveNum={moveNum} numMoves={op.length} setMoveNum={this.setMoveNum} setSpeed={this.setSpeed} speed={this.state.speed}> </StacksView>
+                    <StacksView move={move} moveNum={moveNum} numMoves={op.length} setMoveNum={this.setMoveNum} setStepMode={this.setStepMode} setSpeed={this.setSpeed} stepMode={this.state.stepMode}> </StacksView>
                     </div>
                 </div>
 
