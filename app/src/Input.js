@@ -16,9 +16,9 @@ class InputComponent extends React.Component {
     }
 
 
-    handlePush(event) {
-        // event.preventDefault();
-        this.props.push(this.state.value);
+    handlePush(event) { 
+	const value = this.state.value;
+        this.props.push(value == '' ? '?' : value);
         this.setState({value: ''});
     }
 
@@ -44,7 +44,6 @@ class InputComponent extends React.Component {
                     onChange={this.handleChange}
                     onSearch={this.handlePush}
                     maxLength="2"
-                    minLength="1"
                 />
                 <Button type="primary" danger onClick={this.handlePop} disabled={this.props.disabled}>Delete</Button>
                 
