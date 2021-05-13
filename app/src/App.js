@@ -41,6 +41,7 @@ class App extends React.Component {
     pop = () => {
         const original = { new_queue: this.curQueue(), move_type: "", stacks: [] };
         const moves = [];
+	console.log("head:", Queue.head(this.curQueue()));
         const q = Queue.pop(this.curQueue(), moves);
         this.updateQueue(q, moves);
     };
