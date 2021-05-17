@@ -139,7 +139,6 @@ class App extends React.Component {
 
                 <div className="history" style={{ marginTop: '00px' }}>
                     <h2> Versions </h2>
-                    <br />
                     <Versions queues={this.state.queues} parents={this.state.parents} cur={this.state.cur} setVersion={this.setVersion}></Versions>
                 </div>
 
