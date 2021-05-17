@@ -4,12 +4,17 @@ import { InputComponent } from "./Input";
 import { StacksView } from "./StacksView";
 import { Queue } from './functional';
 import { Versions } from './Versions';
-import { ConsoleSqlOutlined, RightSquareFilled } from '@ant-design/icons';
+import { ConsoleSqlOutlined, RightSquareFilled, InfoCircleFilled, InfoCircleTwoTone, InfoOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Button, notification, Space, Row, Col, Typography } from 'antd';
+
+
+const { Title } = Typography;
+const info_description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ac nisl elementum, venenatis eros quis, laoreet tellus. Aenean vel fermentum lectus. Duis pulvinar fringilla orci, et dignissim turpis ultrices dignissim. Interdum et malesuada fames ac ante ipsum primis in faucibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus accumsan ut libero ac mattis. Morbi elementum enim sed risus imperdiet, eu consectetur erat faucibus. Curabitur imperdiet et ante nec aliquam. Suspendisse in nibh maximus tellus fermentum sollicitudin in at augue. Maecenas mollis mattis quam tristique placerat. Vestibulum eget lobortis risus. Nullam vitae suscipit ex, faucibus blandit ligula. Duis lobortis nulla et mollis fringilla. Nulla tempus, lacus aliquet consectetur facilisis, ex eros rutrum libero, eu suscipit ipsum turpis vel lorem. Vivamus mollis facilisis risus quis auctor. Duis scelerisque vestibulum leo. Etiam magna tortor, venenatis tincidunt dignissim eu, mollis vel ipsum. Morbi sagittis odio quis magna bibendum luctus. Sed fringilla eros id ligula iaculis faucibus. Donec vehicula vestibulum felis a interdum. Quisque sagittis, erat a pretium feugiat, mi magna tempus orci, nec pretium tellus neque eget erat. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec sagittis elit at ligula vehicula, eu pellentesque turpis mollis. Cras mi arcu, lacinia sed vulputate quis, mollis quis enim. Maecenas scelerisque maximus est, sit amet commodo massa sodales vitae. Vestibulum hendrerit luctus euismod. Proin et erat vestibulum elit mattis pharetra. Integer ultrices commodo dui, eu vehicula lectus pulvinar quis. In sodales orci lectus, quis euismod nulla rhoncus nec. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec ac metus nunc. Nulla posuere nisl vitae congue feugiat. Phasellus ac purus eget diam dignissim pellentesque et non tellus. In commodo efficitur elementum. Vivamus mollis ante eget gravida lobortis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam fringilla laoreet sapien, et pellentesque ligula consectetur at. Aliquam sed pellentesque leo. Nulla vel risus justo. Fusce facilisis semper dui, sed semper ante tincidunt sed. Donec non dictum ipsum. Praesent commodo ipsum quam, at mattis velit mattis vitae. Vestibulum varius commodo felis ut consequat. Suspendisse nec nunc egestas, dictum ante nec, accumsan erat. Suspendisse lorem metus, commodo vitae volutpat aliquet, vehicula vitae velit. Praesent rhoncus turpis urna, nec pharetra arcu condimentum non. Sed ut arcu et dui faucibus pulvinar a quis purus. Donec et porta sapien. Etiam auctor eu mi ac iaculis.";
 class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { queues: [Queue.emptyQueue()], parents: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]],  moveNum: 0, stepMode: "auto", speed: 50};
+        this.state = { queues: [Queue.emptyQueue()], parents: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]],  moveNum: 0, stepMode: "auto", speed: 50, notificationButtonVisible: true};
     }
 
     updateQueue = (q, moves) => {
@@ -91,6 +96,24 @@ class App extends React.Component {
         this.interval = setInterval(handleInterval, waittime);
     }
 
+    notificationClose = () => {
+        this.state.notificationButtonVisible = true;
+        console.log(this.state.notificationButtonVisible);
+    }
+
+    openNotificationWithIcon = (type) => {
+        this.state.notificationButtonVisible = false;
+        console.log(this.state.notificationButtonVisible);
+        const key = "notification";
+        notification[type]({
+          key,  // only display one notification at a time
+          message: 'What is this?',
+          description: info_description,
+          duration: 0,  // don't auto-close the notification
+          onClose: this.notificationClose,
+        });
+    }
+
     render() {
         const op = this.curOp();
         const moveNum = this.state.moveNum;
@@ -98,8 +121,11 @@ class App extends React.Component {
 
         return (
             <div className="App">
-                <h1>Functional Queue Visualizer</h1>
-
+                <Row type="flex" align="middle" justify="center">
+                    <Col span={16} offset={4}><div class="title"><Title>Functional Queue Visualizer</Title></div></Col>
+                    <Col span={4}><Button onClick={() => this.openNotificationWithIcon('info')} shape="circle" icon={<InfoOutlined />} style={{display:this.state.notificationButtonVisible ? "" : "none"}}></Button></Col>
+                </Row>
+                
                 <InputComponent push={this.push} pop={this.pop} disabled={this.curQueue().size === 0}></InputComponent>
 
                 <div className="stacks">

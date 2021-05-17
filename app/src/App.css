@@ -1,7 +1,10 @@
 .App {
   text-align: center;
   margin: auto;
-  width: fit-content;
+  /* width: fit-content; */
+}
+.title {
+  margin-top: 15px;
 }
 
 .inputs {
@@ -90,4 +93,9 @@ code {
 
 .stack-name-expl {
   color: blue;
+}
+
+.ant-notification-notice-description{
+  max-height: 400px;
+  overflow-y: scroll;
 }
