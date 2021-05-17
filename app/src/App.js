@@ -4,8 +4,8 @@ import { InputComponent } from "./Input";
 import { StacksView } from "./StacksView";
 import { Queue } from './functional';
 import { Versions } from './Versions';
-import { ConsoleSqlOutlined, RightSquareFilled, InfoCircleFilled, InfoCircleTwoTone, InfoOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Button, notification, Space, Row, Col, Typography } from 'antd';
+import { InfoOutlined } from '@ant-design/icons';
+import { Button, notification, Row, Col, Typography } from 'antd';
 
 
 const { Title } = Typography;
