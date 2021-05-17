@@ -87,7 +87,7 @@ class Queue {
 		else {
 			let newTransferOps = q.transferOps - 1;
 			let newHEAD = Stack.tail(q.HEAD); // POP
-			let val = Stack.head(q.POP);
+			let val = Stack.head(q.HEAD);
 			q = new Queue(q.INS, q.POP, q.POPrev, q.POP2, q.INS2, newHEAD, newTransferOps, newSize);
 			moves.push({new_queue: q, move_type: "POP", stacks: ["HEAD"], val: val});
 			if (q.transferOps === 0) q = Queue.endTransfer(q, moves);

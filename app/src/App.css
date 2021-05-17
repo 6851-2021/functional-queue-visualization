@@ -9,7 +9,8 @@
 }
 
 .functions {
-  margin-bottom: 50px; 
+  margin-top: 20px; 
+  margin-bottom: 30px; 
 }
 
 body {
@@ -26,9 +27,13 @@ code {
     monospace;
 }
 
+#speed-range {
+  vertical-align: middle;
+}
+
 .element {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   border: 1px solid;
   display: inline-block;
   margin: 5px; 

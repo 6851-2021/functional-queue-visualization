@@ -1,20 +1,24 @@
 import React from 'react';
 import './App.css';
+import { Button, Space, Input} from 'antd';
+import "antd/dist/antd.css";
 
-class Input extends React.Component {
+ const { Search } = Input;
+
+class InputComponent extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { value: '' };
+        this.state = { value: ''};
         this.handleChange = this.handleChange.bind(this);
         this.handlePush = this.handlePush.bind(this);
         this.handlePop = this.handlePop.bind(this);
     }
 
 
-    handlePush(event) {
-        event.preventDefault();
-        this.props.push(this.state.value);
+    handlePush(event) { 
+	const value = this.state.value;
+        this.props.push(value == '' ? '?' : value);
         this.setState({value: ''});
     }
 
@@ -22,21 +26,28 @@ class Input extends React.Component {
         this.setState({ value: event.target.value });
     }
 
-    handlePop (event) {
+    handlePop () {
         this.props.pop();
     }
 
     render() {
         return (
+            
             <div className="functions">
-                <form onSubmit={this.handlePush}>
-                    <label>
-                        <input className="inputs" type="text" value={this.state.value} onChange={this.handleChange} maxLength="2"/>
-                    </label>
-                    <input className="inputs" type="submit" value="Insert" />
-                </form>
-
-                <button onClick={this.handlePop}>Delete</button>
+            <Space direction="horizontal">
+                <Search
+                    placeholder="input number to insert"
+                    allowClear
+                    enterButton="Insert"
+                    size="medium"
+                    value={this.state.value}
+                    onChange={this.handleChange}
+                    onSearch={this.handlePush}
+                    maxLength="2"
+                />
+                <Button type="primary" danger onClick={this.handlePop} disabled={this.props.disabled}>Delete</Button>
+                
+            </Space>
             </div>
         );
     }
@@ -44,4 +55,4 @@ class Input extends React.Component {
 }
 
 
-export { Input }
+export { InputComponent }
