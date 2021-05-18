@@ -155,25 +155,23 @@ class App extends React.Component {
                     <Col span={16} offset={4}><div class="title"><Title>Functional Queue Visualizer</Title></div></Col>
                     <Col span={4}><Button onClick={() => this.openNotificationWithIcon('info')} shape="circle" icon={<InfoOutlined />} style={{display:this.state.notificationButtonVisible ? "" : "none"}}></Button></Col>
                 </Row>
-
+                
                 <InputComponent push={this.push} pop={this.pop} disabled={this.curQueue().size === 0}></InputComponent>
-                <Row type="flex" align="top">
-                    <Col span={12}>
-                        <div className="stacks">
-                            <h2> Stacks </h2>
-                            <div id="stacksID">
-                            {/* <StacksView move={move} moveNum={moveNum} numMoves={op.length} setMoveNum={this.setMoveNum} setStepMode={this.setStepMode} setSpeed={this.setSpeed} stepMode={this.state.stepMode}> </StacksView> */}
-                            <StacksView move={move} explanation={explanation} moveNum={moveNum} numMoves={new_op.length} setMoveNum={this.setMoveNum} setStepMode={this.setStepMode} setSpeed={this.setSpeed} stepMode={this.state.stepMode}> </StacksView>
-                            </div>
-                        </div>
-                    </Col>
-                    <Col span={8} offset={4}>
-                        <div className="history">
-                            <h2> Versions </h2>
-                            <Versions queues={this.state.queues} parents={this.state.parents} cur={this.state.cur} setVersion={this.setVersion}></Versions>
-                        </div>
-                    </Col>
-                </Row>
+
+                <div className="stacks">
+                    <h2> Stacks </h2>
+                    <div id="stacksID">
+                    <StacksView move={move} explanation={explanation} moveNum={moveNum} numMoves={new_op.length} setMoveNum={this.setMoveNum} setStepMode={this.setStepMode} setSpeed={this.setSpeed} stepMode={this.state.stepMode}> </StacksView>
+                    </div>
+                </div>
+
+                <br />
+
+                <div className="history" style={{ marginTop: '00px' }}>
+                    <h2> Versions </h2>
+                    <Versions queues={this.state.queues} parents={this.state.parents} cur={this.state.cur} setVersion={this.setVersion}></Versions>
+                </div>
+
             </div>
         );
     }

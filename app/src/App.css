@@ -224,7 +224,7 @@ code {
 /* Hide scrollbar for IE, Edge and Firefox */
 #versions-div {
   /* max-height: 15em; */
-  max-height: 25em;
+  max-height: 15em;
   overflow-y: hidden;
   text-align: left;
   width: 200px;
@@ -252,13 +252,4 @@ code {
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: #a8bbbf;
-}
-
-.stacks{
-  float: right;
-}
-
-.history {
-  float: left;
-  margin-top: '00px';
 }
