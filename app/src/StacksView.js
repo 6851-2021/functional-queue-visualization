@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeftOutlined, StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, ConsoleSqlOutlined, StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import './App.css';
 import { Stack } from './functional';
 import { Select } from 'antd';
@@ -75,13 +75,13 @@ class StacksView extends React.Component {
                         <div className="element-null">&bull;</div>
                         {s.listAllElements().map((e, i) =>
                             {
-                                return ((move.stacks.includes(name) && move.val === e) || 
-                                (explanation.stacks.includes(name) && explanation.val === e))
-                                ? 
+                                const fade_in = ((move.stacks.includes(name) && move.val === e) || 
+                                (explanation.stacks.includes(name) && explanation.val === e));
+                                return (
                                 <>
                                 <ArrowLeftOutlined key={move+"-"+explanation+"-"+moveNum+"-"+e+"-arrow"}/>
                                 <div 
-                                    className="element fade-in" 
+                                    className={fade_in ? "element fade-in" : "element"}
                                     key={move+"-"+explanation+"-"+moveNum+"-"+e+"-div"}
                                     style={{
                                         backgroundColor: (move.stacks.includes(name) && move.val === e) ||
@@ -90,20 +90,7 @@ class StacksView extends React.Component {
                                     }}>
                                         {e}
                                 </div>
-                                </> : 
-                                <>
-                                <ArrowLeftOutlined key={move+"-"+explanation+"-"+moveNum+"-"+e+"-arrow"}/>
-                                <div 
-                                    className="element" 
-                                    key={move+"-"+explanation+"-"+moveNum+"-"+e+"-div"}
-                                    style={{
-                                        backgroundColor: (move.stacks.includes(name) && move.val === e) || 
-                                                        (explanation.stacks.includes(name) && explanation.val === e) ? 
-                                                        'aquamarine' : 'white'
-                                    }}>
-                                        {e}
-                                </div>
-                                </>
+                                </>);
                             }
                         )}
                         <ArrowLeftOutlined /> <span className="stack-name">{nameHTML} </span>
@@ -144,6 +131,13 @@ class StacksView extends React.Component {
         )
     }
 
+    componentDidUpdate() {
+        for (let element of document.getElementsByClassName("stackDiv")) {
+            const maxScrollLeft = element.scrollWidth - element.clientWidth;
+            element.scrollLeft = maxScrollLeft;
+            console.log(element);
+        }
+    }
 }
 
 export { StacksView }

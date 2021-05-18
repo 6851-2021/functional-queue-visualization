@@ -45,8 +45,6 @@ class Versions extends React.Component {
         return (
             <div id="versions-div">
                 {versions}
-                <div style={{ float:"left", clear: "both" }}
-                ref={(el) => { this.versionsEnd = el; }}></div>
             </div>
         );
     }
