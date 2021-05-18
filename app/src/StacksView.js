@@ -71,7 +71,7 @@ class StacksView extends React.Component {
                 const s = move.new_queue[name];
                 const nameHTML = stackNamesHTML[name];
                 return (
-                    <div className="stackDiv" style={{height: '40px', textAlign: 'right' }}>
+                    <div className="stackDiv">
                         <div className="element-null">&bull;</div>
                         {s.listAllElements().map((e, i) =>
                             {
