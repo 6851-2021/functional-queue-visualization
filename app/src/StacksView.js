@@ -26,7 +26,7 @@ class StacksView extends React.Component {
     }
 
     showExplanation = () => {
-        const move = this.props.move;
+        const move = this.props.explanation;
         switch (move.move_type) {
             case 'PUSH':
                 let pushStack = move.stacks[0];
@@ -61,8 +61,8 @@ class StacksView extends React.Component {
 
     render() {
         const move = this.props.move;
-
-
+        console.log("move: ", move); 
+        const explanation = this.props.explanation; 
         const moveNum = this.props.moveNum;
         const numMoves = this.props.numMoves;
         const setMoveNum = this.props.setMoveNum;
@@ -71,10 +71,40 @@ class StacksView extends React.Component {
                 const s = move.new_queue[name];
                 const nameHTML = stackNamesHTML[name];
                 return (
-                    <div className="stackDiv" style={{ backgroundColor: move.stacks.includes(name) ? 'aquamarine' : 'white', height: '40px', textAlign: 'right' }}>
+                    <div className="stackDiv" style={{height: '40px', textAlign: 'right' }}>
                         <div className="element-null">&bull;</div>
                         {s.listAllElements().map((e, i) =>
-                            <><ArrowLeftOutlined /><div className="element">{e}</div></>
+                            {
+                                return ((move.stacks.includes(name) && move.val === e) || 
+                                (explanation.stacks.includes(name) && explanation.val === e))
+                                ? 
+                                <>
+                                <ArrowLeftOutlined key={move+"-"+explanation+"-"+moveNum+"-"+e+"-arrow"}/>
+                                <div 
+                                    className="element fade-in" 
+                                    key={move+"-"+explanation+"-"+moveNum+"-"+e+"-div"}
+                                    style={{
+                                        backgroundColor: (move.stacks.includes(name) && move.val === e) ||
+                                                        (explanation.stacks.includes(name) && explanation.val === e) ? 
+                                                        'aquamarine' : 'white'
+                                    }}>
+                                        {e}
+                                </div>
+                                </> : 
+                                <>
+                                <ArrowLeftOutlined key={move+"-"+explanation+"-"+moveNum+"-"+e+"-arrow"}/>
+                                <div 
+                                    className="element" 
+                                    key={move+"-"+explanation+"-"+moveNum+"-"+e+"-div"}
+                                    style={{
+                                        backgroundColor: (move.stacks.includes(name) && move.val === e) || 
+                                                        (explanation.stacks.includes(name) && explanation.val === e) ? 
+                                                        'aquamarine' : 'white'
+                                    }}>
+                                        {e}
+                                </div>
+                                </>
+                            }
                         )}
                         <ArrowLeftOutlined /> <span className="stack-name">{nameHTML} </span>
                     </div>)
@@ -82,7 +112,7 @@ class StacksView extends React.Component {
         );
         const move_number = (
             <div>
-                <StepBackwardOutlined onClick={() => setMoveNum(moveNum - 1)} /> {moveNum + 1}/{numMoves} <StepForwardOutlined onClick={() => setMoveNum(moveNum + 1)} />
+                <StepBackwardOutlined onClick={() => setMoveNum(moveNum - 1, numMoves)} /> {moveNum + 1}/{numMoves} <StepForwardOutlined onClick={() => setMoveNum(moveNum + 1, numMoves)} />
             </div>
         );
         const speed_select = (
