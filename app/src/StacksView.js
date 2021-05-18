@@ -47,7 +47,7 @@ class StacksView extends React.Component {
             case 'CREATE':
                 return <>Create queue</>;
             default:
-                return <>Unknown move</>;
+                return <></>;
         }
     }
 

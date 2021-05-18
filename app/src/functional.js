@@ -51,7 +51,7 @@ class Queue {
 		return new Queue(new Stack(), new Stack(), new Stack(), new Stack(), new Stack(), new Stack(), 0, 0);
 	}
 
-	static push(q, val, moves) {
+	static push(q, val, moves=[]) {
 		q = Queue.passive(q, moves);
 		let newSize = q.size + 1;
 		if (q.transferOps === 0) {
@@ -74,7 +74,7 @@ class Queue {
 		}
 	}
 
-	static pop(q, moves) {
+	static pop(q, moves=[]) {
 		q = Queue.passive(q, moves);
 		let newSize = q.size - 1;
 		if (q.transferOps === 0) {
