@@ -59,7 +59,6 @@ code {
   width: 750px; 
   overflow-x: scroll;
   white-space: nowrap;
-  display: inline-table;
 }
 
 .selected {
