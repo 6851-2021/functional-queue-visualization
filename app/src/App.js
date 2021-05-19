@@ -189,7 +189,7 @@ class App extends React.Component {
                 <h2> Stack Operations </h2>
 		<div className="stacks">
                     <div id="stacksID">
-                    <StacksView move={move} moveNum={moveNum} numMoves={op.length} setMoveNum={this.setMoveNum} setStepMode={this.setStepMode} setSpeed={this.setSpeed} stepMode={this.state.stepMode}> opNum={this.state.ops.length}> </StacksView>
+                    <StacksView move={move} moveNum={moveNum} numMoves={op.length} setMoveNum={this.setMoveNum} setStepMode={this.setStepMode} setSpeed={this.setSpeed} stepMode={this.state.stepMode} opNum={this.state.ops.length}></StacksView>
                     </div>
                 </div>
                 <br/>

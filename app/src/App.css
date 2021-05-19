@@ -104,7 +104,7 @@ code {
 
 .explanation {
   color: seagreen; 
-  background-color: white;
+  margin-top: 5px; 
 }
 
 #speed-select-div {
@@ -116,7 +116,8 @@ code {
 }
 
 .stack-name-expl {
-  color: blue;
+  /* color: blue; */
+  font-weight: bold;
 }
 
 .fade-in {
@@ -251,10 +252,6 @@ code {
 
 #versions-div:hover {
   overflow-y: scroll;
-}
-
-.stacks{
-  /* float: right; */
 }
 
 .history {
