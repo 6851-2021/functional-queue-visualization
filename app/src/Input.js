@@ -38,14 +38,14 @@ class InputComponent extends React.Component {
                 <Search
                     placeholder="input number to insert"
                     allowClear
-                    enterButton="Push"
+                    enterButton="Enqueue"
                     size="medium"
                     value={this.state.value}
                     onChange={this.handleChange}
                     onSearch={this.handlePush}
                     maxLength="2"
                 />
-                <Button type="primary" danger onClick={this.handlePop} disabled={this.props.disabled}>Pop</Button>
+                <Button type="primary" danger onClick={this.handlePop} disabled={this.props.disabled}>Dequeue</Button>
                 
             </Space>
             </div>

@@ -27,9 +27,9 @@ class Versions extends React.Component {
             if (parent == -1) {
                 code = <> {left_queue} = EmptyQueue() </>
             } else if (Queue.size(this.props.queues[parent]) < Queue.size(q)) {
-                code = <> {left_queue} = Push({right_queue}, {qelems[qelems.length - 1]}) </>
+                code = <> {left_queue} = Enqueue({right_queue}, {qelems[qelems.length - 1]}) </>
             } else {
-                code = <> {left_queue} = Pop({right_queue}) </>
+                code = <> {left_queue} = Dequeue({right_queue}) </>
             }
 
             const spanClass = "version-ref" + (i == cur || ancs.includes(i)  ? " current-version": "");
