@@ -182,7 +182,7 @@ class App extends React.Component {
                  
                 <Row type="flex" align="middle" justify="center">
                     <Col span={16} offset={4}><div className="title"><Title>Functional Queue Visualizer</Title></div></Col>
-                    <Col span={4}><Button onClick={() => this.openNotificationWithIcon('info')} shape="circle" icon={<InfoOutlined />} style={{display:this.state.notificationButtonVisible ? "" : "none"}}></Button></Col>
+                    <Col span={4}><Button id="notif-button" onClick={() => this.openNotificationWithIcon('info')} shape="circle" icon={<InfoOutlined />} style={{display:this.state.notificationButtonVisible ? "" : "none"}}></Button></Col>
                 </Row>
 
                 <InputComponent push={this.push} pop={this.pop} disabled={this.curQueue().size === 0}></InputComponent>

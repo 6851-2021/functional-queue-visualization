@@ -25,13 +25,13 @@ function Node({ node, cur, onClick }) {
       )}
       <text
         dy={'.33em'}
-        fontSize={9}
-        fontFamily="Arial"
+        fontSize={10}
+        // fontFamily="Arial"
         textAnchor={'middle'}
         style={{ pointerEvents: 'none' }}
-        fill={inFocus? "white" : '#2b3e51'}
+        fill={inFocus? "white" : 'black'}
       >
-        Q{node.data.name}
+        Q<tspan fontSize={8.5} dy={'.15em'}>{node.data.name}</tspan>
       </text>
     </Fragment>
   );
