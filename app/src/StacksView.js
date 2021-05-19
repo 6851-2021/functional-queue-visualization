@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowLeftOutlined, ConsoleSqlOutlined, StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import './App.css';
-import { Stack } from './functional';
+import { Queue, Stack } from './functional';
 import { Select } from 'antd';
 import "antd/dist/antd.css";
 
@@ -43,11 +43,11 @@ class StacksView extends React.Component {
                 let stack2 = move.stacks[1];
                 return (<>Move {move.val} from <span className="stack-name-expl">{stackNamesHTML[stack1]}</span> to <span className="stack-name-expl">{stackNamesHTML[stack2]}</span></>);
             case 'END TRANSFER 1':
-                return (<>End transfer mode (1): (assign <span className="stack-name-expl">{stackNamesHTML['INS']}</span> to <span className="stack-name-expl">{stackNamesHTML['INS2']}</span>)</>);
+                return (<>End transfer mode (Part 1): assign <span className="stack-name-expl">{stackNamesHTML['INS']}</span> to <span className="stack-name-expl">{stackNamesHTML['INS2']}</span></>);
             case 'END TRANSFER 2':
-                return (<>End transfer mode (2): (assign <span className="stack-name-expl">{stackNamesHTML['POP']}</span> to <span className="stack-name-expl">{stackNamesHTML['POP2']}</span>)</>);
+                return (<>End transfer mode (Part 2): assign <span className="stack-name-expl">{stackNamesHTML['POP']}</span> to <span className="stack-name-expl">{stackNamesHTML['POP2']}</span></>);
             case 'END TRANSFER 3':
-                return (<>End transfer mode (3): (assign <span className="stack-name-expl">{stackNamesHTML['INS2']}</span>, <span className="stack-name-expl">{stackNamesHTML['POP2']}</span>, <span className="stack-name-expl">{stackNamesHTML['POPrev']}</span>, <span className="stack-name-expl">{stackNamesHTML['HEAD']}</span> to null)</>);
+                return (<>End transfer mode (Part 3): assign <span className="stack-name-expl">{stackNamesHTML['INS2']}</span>, <span className="stack-name-expl">{stackNamesHTML['POP2']}</span>, <span className="stack-name-expl">{stackNamesHTML['POPrev']}</span>, <span className="stack-name-expl">{stackNamesHTML['HEAD']}</span> to null</>);
             case 'CREATE':
                 return <>Create queue</>;
             default:
@@ -70,6 +70,7 @@ class StacksView extends React.Component {
         const moveNum = this.props.moveNum;
         const numMoves = this.props.numMoves;
         const setMoveNum = this.props.setMoveNum;
+        const inTransferMode = Stack.size(move.new_queue["HEAD"]) > 0;
         const stacks = stackNames.map(
             (name) => {
 
@@ -84,6 +85,7 @@ class StacksView extends React.Component {
                 const elements_disp = elements.map((e, i) => {
                     let isLast = (i == elements.length - 1);
                     let affected = !onlyLast || (onlyLast && isLast);
+                    let isHead = isLast && ((inTransferMode && name == "HEAD") || (!inTransferMode && name == "POP"));
 
                     let fade_class = "";
                     let color = "white";
@@ -95,7 +97,10 @@ class StacksView extends React.Component {
                     } else if (affected && exit) {
                         fade_class = "fade-out";
                         color = "indianred";
-                        on_anim_end = (event) => { event.target.style.display = "none";};
+                        on_anim_end = (event) => { 
+                            event.target.style.display = "none";
+                            if (isHead && Queue.size(move.new_queue["HEAD"]) > 0) event.target.previousSibling.classList.add("head-elem"); // hacky :(
+                        };
                     } else if (affected && copy) {
                         color = "deepskyblue";
                     } 
@@ -103,7 +108,7 @@ class StacksView extends React.Component {
                         <span className={fade_class} onAnimationEnd={on_anim_end} key={this.props.opNum + moveNum + i + name}>
                             <ArrowLeftOutlined />
                             <div
-                                className="element"
+                                className={"element" + (isHead ? " head-elem" : "")}
                                 style={{ backgroundColor: color }}
                                 onAnimationEnd={(event) => {event.target.style.backgroundColor = "white";}}
                             >
@@ -141,7 +146,7 @@ class StacksView extends React.Component {
         return (
             <div>
                 {move_number}
-                <p className="explanation" style={{ height: '25px' }}>{this.showExplanation()}</p>
+                <p className="explanation"><i>{this.showExplanation()}</i></p>
                 {/* <div className={this.state.hidden2}> */}
                 <div>
                     {stacks}
