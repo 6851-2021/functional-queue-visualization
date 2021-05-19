@@ -69,8 +69,8 @@ class StacksView extends React.Component {
         const stacks = stackNames.map(
             (name) => {
 
-                let enter = (move_type == 'PUSH' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[1] == name); 
-                let exit = (move_type == 'POP' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[0] == name); 
+                let enter = (move_type == 'PUSH' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[1] == name);
+                let exit = (move_type == 'POP' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[0] == name);
 
                 let s = exit ? move.old_queue[name] : move.new_queue[name];
 
@@ -80,21 +80,22 @@ class StacksView extends React.Component {
                     let affected = (move_type == 'PUSH' || move_type == 'POP' || move_type == 'FLIP') && isLast;
                     let fade_class = "";
                     let color = "white";
-                    let on_anim_end = () => {};
+                    let on_anim_end = () => { };
                     if (affected && enter) {
                         fade_class = "fade-in";
                         color = "aquamarine";
                     } else if (affected && exit) {
                         fade_class = "fade-out";
                         color = "red";
-                        on_anim_end = (event) => {event.target.style.display = "none";};
+                        on_anim_end = (event) => { event.target.style.display = "none"; };
                     }
+                    console.log("meow", move + moveNum + i + name);
                     return (
-                        <span className={fade_class} onAnimationEnd={on_anim_end} key={this.uniqueKey++}>
-                            <ArrowLeftOutlined/>
+                        <span className={fade_class} onAnimationEnd={on_anim_end} key={this.props.opNum + moveNum + i + name}>
+                            <ArrowLeftOutlined />
                             <div
                                 className="element"
-                                style={{ backgroundColor: color}}>
+                                style={{ backgroundColor: color }}>
                                 {e}
                             </div>
                         </span>);

@@ -119,19 +119,19 @@ class Queue {
 				let newINS = Stack.tail(q.INS);
 				let newPOP2 = Stack.push(q.POP2, Stack.head(q.INS)); // FLIP INS onto POP2
 				var q_new = new Queue(newINS, q.POP, q.POPrev, newPOP2, q.INS2, q.HEAD, newTransferOps, q.size);
-				moves.push({ new_queue: q_new, old_queue: q, move_type: "FLIP", stacks: ["INS", "POP2"], val: Stack.head(q.POP2) });
+				moves.push({ new_queue: q_new, old_queue: q, move_type: "FLIP", stacks: ["INS", "POP2"], val: Stack.head(q_new.POP2) });
 				q = q_new;
 				let newPOP = Stack.tail(q.POP);
 				let newPOPrev = Stack.push(q.POPrev, Stack.head(q.POP)); // FLIP POP onto POPrev
 				var q_new = new Queue(q.INS, newPOP, newPOPrev, q.POP2, q.INS2, q.HEAD, newTransferOps, q.size);
-				moves.push({ new_queue: q_new, old_queue: q, move_type: "FLIP", stacks: ["POP", "POPrev"], val: Stack.head(q.POPrev) });
+				moves.push({ new_queue: q_new, old_queue: q, move_type: "FLIP", stacks: ["POP", "POPrev"], val: Stack.head(q_new.POPrev) });
 				q = q_new;
 			}
 			else { // remaining n - d operations
 				let newPOPrev = Stack.tail(q.POPrev);
 				let newPOP2 = Stack.push(q.POP2, Stack.head(q.POPrev)); // FLIP POPrev onto POP2
 				var q_new = new Queue(q.INS, q.POP, newPOPrev, newPOP2, q.INS2, q.HEAD, newTransferOps, q.size);
-				moves.push({ new_queue: q_new, old_queue: q, move_type: "FLIP", stacks: ["POPrev", "POP2"], val: Stack.head(q.POP2) });
+				moves.push({ new_queue: q_new, old_queue: q, move_type: "FLIP", stacks: ["POPrev", "POP2"], val: Stack.head(q_new.POP2) });
 				q = q_new;
 			}
 			if (q.transferOps === 0) {
