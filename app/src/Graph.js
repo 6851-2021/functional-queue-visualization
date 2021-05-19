@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 
 import { Group } from '@vx/group';
-import { Queue } from './functional';
 import { LinearGradient } from '@vx/gradient';
 import { Tree } from '@vx/hierarchy';
 

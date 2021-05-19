@@ -6,6 +6,9 @@
 .title {
   margin-top: 15px;
 }
+.title-h2 {
+  margin-top: 10px;
+}
 
 .inputs {
   margin: 5px; 
@@ -150,4 +153,8 @@ code {
 .history {
   /* float: left; */
   margin-top: '00px';
+}
+
+.toggleVersions {
+  float: left;
 }

@@ -6,7 +6,7 @@ import { Queue } from './functional';
 import { Versions } from './Versions';
 import { Graph } from './Graph';
 import { InfoOutlined } from '@ant-design/icons';
-import { Button, notification, Row, Col, Typography } from 'antd';
+import { Button, notification, Row, Col, Typography, Switch } from 'antd';
 
 import { hierarchy } from 'd3-hierarchy';
 
@@ -17,7 +17,7 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { queues: [Queue.emptyQueue()], parents: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]],  moveNum: 0, stepMode: "auto", speed: 50, notificationButtonVisible: true};
+        this.state = { queues: [Queue.emptyQueue()], parents: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]],  moveNum: 0, stepMode: "auto", speed: 50, notificationButtonVisible: true, displayLinear:true};
         this.graphData =  {
             name: "Q0",
             children: [
@@ -136,12 +136,11 @@ class App extends React.Component {
     }
 
     notificationClose = () => {
-        this.state.notificationButtonVisible = true;
-        console.log(this.state.notificationButtonVisible);
+        this.setState({notificationButtonVisible: true});
     }
 
     openNotificationWithIcon = (type) => {
-        this.state.notificationButtonVisible = false;
+        this.setState({notificationButtonVisible: false});
         console.log(this.state.notificationButtonVisible);
         const key = "notification";
         notification[type]({
@@ -152,11 +151,23 @@ class App extends React.Component {
           onClose: this.notificationClose,
         });
     }
+    displayVersionView = (isLinear) => {
+        console.log('isLinear', isLinear);
+        this.setState({displayLinear: isLinear});
+    }
 
     render() {
         const op = this.curOp();
         const moveNum = this.state.moveNum;
         const move = op[moveNum];
+        let versionView;
+        if (this.state.displayLinear) {
+            versionView = <Versions queues={this.state.queues} parents={this.state.parents} cur={this.state.cur} setVersion={this.setVersion}></Versions>;
+            
+        } else {
+            versionView = <Graph data={this.graphData} width={600} height={400} setVersion={this.setVersion} queues={this.state.queues} cur={this.state.cur} root={this.root}/>;
+            console.log('graph');
+        }
 
         return (
             <div className="App">
@@ -174,16 +185,19 @@ class App extends React.Component {
                     </div>
                 </div>
                 <br/>
-                <Row type="flex" justify="center">
-                    <Col span={24}>
-                        <div className="history">
-                            <h2> Versions </h2>
-                            {/* <Versions queues={this.state.queues} parents={this.state.parents} cur={this.state.cur} setVersion={this.setVersion}></Versions> */}
-                            <Graph data={this.graphData} width={600} height={400} setVersion={this.setVersion} queues={this.state.queues} cur={this.state.cur} root={this.root}/>
-                        </div>
-                    </Col>
-                </Row>
-                    
+                <div className="history">
+                    <Row type="flex" align="middle" justify="center">
+                        <Col span={4} offset={4}>
+                            <div class="title-h2"><h2> Versions </h2></div>
+                        </Col>
+                        <Col span={4}>
+                            <div class="toggleVersions"> 
+                                <Switch onClick={(checked) => this.displayVersionView(checked)} checkedChildren="linear" unCheckedChildren="graph" defaultChecked />
+                            </div>
+                        </Col> 
+                    </Row>
+                    {versionView}
+                </div>        
             </div>
         );
     }
