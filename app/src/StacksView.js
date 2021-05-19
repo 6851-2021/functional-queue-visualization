@@ -61,36 +61,45 @@ class StacksView extends React.Component {
 
     render() {
         const move = this.props.move;
+        const move_type = move.move_type;
         console.log("move: ", move);
         const moveNum = this.props.moveNum;
         const numMoves = this.props.numMoves;
         const setMoveNum = this.props.setMoveNum;
         const stacks = stackNames.map(
             (name) => {
-                const s = move.new_queue[name];
-                const nameHTML = stackNamesHTML[name];
+
+                let enter = (move_type == 'PUSH' && move.stacks[0] == name) || (move_type == 'POP' && move.stacks[1] == name); 
+                let exit = (move_type == 'POP' && move.stacks[0] == name); 
+
+                let s = exit ? move.old_queue[name] : move.new_queue[name];
+
                 const elements = s.listAllElements();
-                const elements_disp = s.listAllElements().map((e, i) => {
-                    let fade_in = false;
-                    let fade_out = false;//(move.stacks.includes(name) && move.val === e);
-                    switch (move.move_type) {
-                        case 'PUSH':
-                            if (name == move.stacks[0] && i == elements.length - 1) fade_in = true;
-                        case 'POP':
-                            if (name == move.stacks[1] && i == elements.length - 1) fade_in = true;
-                            if (name == move.stacks[0] && i == elements.length - 1) fade_in = true;
+                const elements_disp = elements.map((e, i) => {
+                    let isLast = (i == elements.length - 1);
+                    let affected = (move_type == 'PUSH' || move_type == 'POP') && isLast;
+                    let fade_class = "";
+                    let color = "white";
+                    if (affected && enter) {
+                        fade_class = "fade-in";
+                        color = "aquamarine";
+                    } else if (affected && exit) {
+                        fade_class = "fade-out";
+                        color = "red";
                     }
+                    this.fadingOut = [];
                     return (
-                        <>
+                        <span className={fade_class}>
                             <ArrowLeftOutlined key={move + "-" + moveNum + "-" + e + "-arrow"} />
                             <div
-                                className={fade_in ? "element fade-in" : "element"}
+                                className="element"
                                 key={move + "-" + moveNum + "-" + e + "-div"}
-                                style={{ backgroundColor: fade_in ? 'aquamarine' : 'white' }}>
+                                style={{ backgroundColor: color}}>
                                 {e}
                             </div>
-                        </>);
+                        </span>);
                 });
+                const nameHTML = stackNamesHTML[name];
                 return (
                     <div className="stackDiv">
                         <div className="element-null">&bull;</div>
@@ -134,10 +143,18 @@ class StacksView extends React.Component {
     }
 
     componentDidUpdate() {
+        // handle scrolling in the (hopefully rare) case where stacks get too long
         for (let element of document.getElementsByClassName("stackDiv")) {
             const maxScrollLeft = element.scrollWidth - element.clientWidth;
             element.scrollLeft = maxScrollLeft;
-            console.log(element);
+        }
+        // remove faded out elements
+        for (let element of document.getElementsByClassName("fade-out")) {
+            console.log("recognized", element);
+            element.addEventListener('animationend', () => {
+                element.style.display = "none";
+                console.log("transition ended for", element);
+            });
         }
     }
 }

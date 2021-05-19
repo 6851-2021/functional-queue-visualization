@@ -126,7 +126,7 @@ class App extends React.Component {
         return (
             <div className="App">
                 <Row type="flex" align="middle" justify="center">
-                    <Col span={16} offset={4}><div class="title"><Title>Functional Queue Visualizer</Title></div></Col>
+                    <Col span={16} offset={4}><div className="title"><Title>Functional Queue Visualizer</Title></div></Col>
                     <Col span={4}><Button onClick={() => this.openNotificationWithIcon('info')} shape="circle" icon={<InfoOutlined />} style={{display:this.state.notificationButtonVisible ? "" : "none"}}></Button></Col>
                 </Row>
                 
