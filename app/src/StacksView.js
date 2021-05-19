@@ -69,7 +69,7 @@ class StacksView extends React.Component {
         const stacks = stackNames.map(
             (name) => {
 
-                let enter = (move_type == 'PUSH' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[1] == name);
+                let enter = (move_type == 'PUSH' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[1] == name) || (move_type == 'BEGIN TRANSFER' && name == 'HEAD');
                 let exit = (move_type == 'POP' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[0] == name);
 
                 let s = exit ? move.old_queue[name] : move.new_queue[name];
@@ -77,17 +77,20 @@ class StacksView extends React.Component {
                 const elements = s.listAllElements();
                 const elements_disp = elements.map((e, i) => {
                     let isLast = (i == elements.length - 1);
-                    let affected = (move_type == 'PUSH' || move_type == 'POP' || move_type == 'FLIP') && isLast;
+                    let affected = ((move_type == 'PUSH' || move_type == 'POP' || move_type == 'FLIP') && isLast); // only used for PUSH/POP/FLIP
                     let fade_class = "";
                     let color = "white";
                     let on_anim_end = () => { };
-                    if (affected && enter) {
+
+                    if (affected && enter || (move_type == 'BEGIN TRANSFER' && name == 'HEAD')) {
                         fade_class = "fade-in";
                         color = "aquamarine";
                     } else if (affected && exit) {
                         fade_class = "fade-out";
-                        color = "red";
-                        on_anim_end = (event) => { event.target.style.display = "none"; };
+                        color = "indianred";
+                        on_anim_end = (event) => { event.target.style.display = "none";};
+                    } else if (move_type == 'BEGIN TRANSFER' && name == 'POP') {
+                        color = "deepskyblue";
                     }
                     console.log("meow", move + moveNum + i + name);
                     return (
@@ -95,7 +98,9 @@ class StacksView extends React.Component {
                             <ArrowLeftOutlined />
                             <div
                                 className="element"
-                                style={{ backgroundColor: color }}>
+                                style={{ backgroundColor: color }}
+                                onAnimationEnd={(event) => {event.target.style.backgroundColor = "white";}}
+                            >
                                 {e}
                             </div>
                         </span>);
