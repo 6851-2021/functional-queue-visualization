@@ -7,6 +7,7 @@ import { Tree } from '@vx/hierarchy';
 
 import Links from "./Links";
 import Nodes from "./Nodes";
+import { select } from 'd3-selection';
 
 class Graph extends React.Component {
 
@@ -76,6 +77,9 @@ class Graph extends React.Component {
                         layout={layout}
                         orientation={orientation}
                         onNodeClick={(node) => {
+                            // console.log('select',select("#" + node.name)); //.select("circle"));
+                            // select("#" + node.name).select("rect").style("fill", "pink");
+
                             console.log(node);
                             this.props.setVersion(node.id);
                             this.forceUpdate();
@@ -88,15 +92,6 @@ class Graph extends React.Component {
             </div>
         );
     }
-
-    componentDidUpdate() {
-        if (this.props.cur == this.props.queues.length - 1) {
-            const element = document.getElementById("version_" + this.props.cur);
-            console.log('new element ', element);
-            //element.scrollIntoView({behavior: 'smooth'});
-        }
-    }
-
 }
 
 
