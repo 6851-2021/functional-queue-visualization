@@ -23,6 +23,7 @@ class StacksView extends React.Component {
         this.state = {};
         this.onStepModeChange = this.onStepModeChange.bind(this);
         this.onSpeedChange = this.onSpeedChange.bind(this);
+        this.uniqueKey = 0;
     }
 
     showExplanation = () => {
@@ -34,7 +35,6 @@ class StacksView extends React.Component {
                 return (<>Push {move.val} onto <span className="stack-name-expl">{stackNamesHTML[pushStack]}</span></>);
             case 'POP':
                 let popStack = move.stacks[0];
-                let popVal = Stack.head(move.new_queue[popStack]);
                 return (<>Pop {move.val} from <span className="stack-name-expl">{stackNamesHTML[popStack]}</span></>);
             case 'BEGIN TRANSFER':
                 return (<>Enter transfer mode</>)
@@ -69,31 +69,31 @@ class StacksView extends React.Component {
         const stacks = stackNames.map(
             (name) => {
 
-                let enter = (move_type == 'PUSH' && move.stacks[0] == name) || (move_type == 'POP' && move.stacks[1] == name); 
-                let exit = (move_type == 'POP' && move.stacks[0] == name); 
+                let enter = (move_type == 'PUSH' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[1] == name); 
+                let exit = (move_type == 'POP' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[0] == name); 
 
                 let s = exit ? move.old_queue[name] : move.new_queue[name];
 
                 const elements = s.listAllElements();
                 const elements_disp = elements.map((e, i) => {
                     let isLast = (i == elements.length - 1);
-                    let affected = (move_type == 'PUSH' || move_type == 'POP') && isLast;
+                    let affected = (move_type == 'PUSH' || move_type == 'POP' || move_type == 'FLIP') && isLast;
                     let fade_class = "";
                     let color = "white";
+                    let on_anim_end = () => {};
                     if (affected && enter) {
                         fade_class = "fade-in";
                         color = "aquamarine";
                     } else if (affected && exit) {
                         fade_class = "fade-out";
                         color = "red";
+                        on_anim_end = (event) => {event.target.style.display = "none";};
                     }
-                    this.fadingOut = [];
                     return (
-                        <span className={fade_class}>
-                            <ArrowLeftOutlined key={move + "-" + moveNum + "-" + e + "-arrow"} />
+                        <span className={fade_class} onAnimationEnd={on_anim_end} key={this.uniqueKey++}>
+                            <ArrowLeftOutlined/>
                             <div
                                 className="element"
-                                key={move + "-" + moveNum + "-" + e + "-div"}
                                 style={{ backgroundColor: color}}>
                                 {e}
                             </div>
@@ -101,7 +101,7 @@ class StacksView extends React.Component {
                 });
                 const nameHTML = stackNamesHTML[name];
                 return (
-                    <div className="stackDiv">
+                    <div className="stackDiv" key={move + "-" + name + "-stack"}>
                         <div className="element-null">&bull;</div>
                         {elements_disp}
                         <ArrowLeftOutlined /> <span className="stack-name">{nameHTML} </span>
@@ -140,22 +140,6 @@ class StacksView extends React.Component {
                 </div>
             </div>
         )
-    }
-
-    componentDidUpdate() {
-        // handle scrolling in the (hopefully rare) case where stacks get too long
-        for (let element of document.getElementsByClassName("stackDiv")) {
-            const maxScrollLeft = element.scrollWidth - element.clientWidth;
-            element.scrollLeft = maxScrollLeft;
-        }
-        // remove faded out elements
-        for (let element of document.getElementsByClassName("fade-out")) {
-            console.log("recognized", element);
-            element.addEventListener('animationend', () => {
-                element.style.display = "none";
-                console.log("transition ended for", element);
-            });
-        }
     }
 }
 

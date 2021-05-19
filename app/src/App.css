@@ -118,11 +118,11 @@ code {
 }
 
 .fade-in {
-  animation: fadeIn ease 1s;
-  -webkit-animation: fadeIn ease 1s;
-  -moz-animation: fadeIn ease 1s;
-  -o-animation: fadeIn ease 1s;
-  -ms-animation: fadeIn ease 1s;
+  animation: fadeIn ease-in 1s;
+  -webkit-animation: fadeIn ease-in 1s;
+  -moz-animation: fadeIn ease-in 1s;
+  -o-animation: fadeIn ease-in 1s;
+  -ms-animation: fadeIn ease-in 1s;
 }
 
 @keyframes fadeIn {
@@ -176,6 +176,10 @@ code {
   -moz-animation: fadeOut ease 1s;
   -o-animation: fadeOut ease 1s;
   -ms-animation: fadeOut ease 1s;
+}
+
+.faded-out {
+  display: none;
 }
 
 @keyframes fadeOut {
