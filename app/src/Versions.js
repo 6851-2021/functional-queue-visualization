@@ -45,8 +45,6 @@ class Versions extends React.Component {
         return (
             <div id="versions-div">
                 {versions}
-                <div style={{ float:"left", clear: "both" }}
-                ref={(el) => { this.versionsEnd = el; }}></div>
             </div>
         );
     }
@@ -54,7 +52,7 @@ class Versions extends React.Component {
     componentDidUpdate() {
         if (this.props.cur == this.props.queues.length - 1) {
             const element = document.getElementById("version_" + this.props.cur);
-            element.scrollIntoView({behavior: 'smooth'});
+            element.parentNode.scrollTop = element.offsetTop;
         }
     }
 

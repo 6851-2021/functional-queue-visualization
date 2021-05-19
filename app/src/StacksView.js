@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeftOutlined, StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, ConsoleSqlOutlined, StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import './App.css';
 import { Stack } from './functional';
 import { Select } from 'antd';
@@ -7,7 +7,7 @@ import "antd/dist/antd.css";
 
 const { Option } = Select;
 
-const stackNames = ['INS', 'POP', 'POPrev', 'POP2', 'INS2', 'HEAD'];
+const stackNames = ['INS', 'POP', 'POPrev', 'INS2', 'POP2', 'HEAD'];
 const stackNamesHTML = {
     'INS': (<>INS</>),
     'POP': (<>POP</>),
@@ -23,6 +23,7 @@ class StacksView extends React.Component {
         this.state = {};
         this.onStepModeChange = this.onStepModeChange.bind(this);
         this.onSpeedChange = this.onSpeedChange.bind(this);
+        this.uniqueKey = 0;
     }
 
     showExplanation = () => {
@@ -34,20 +35,23 @@ class StacksView extends React.Component {
                 return (<>Push {move.val} onto <span className="stack-name-expl">{stackNamesHTML[pushStack]}</span></>);
             case 'POP':
                 let popStack = move.stacks[0];
-                let popVal = Stack.head(move.new_queue[popStack]);
                 return (<>Pop {move.val} from <span className="stack-name-expl">{stackNamesHTML[popStack]}</span></>);
             case 'BEGIN TRANSFER':
-                return (<>Enter transfer mode</>)
+                return (<>Enter transfer mode (assign <span className="stack-name-expl">{stackNamesHTML['HEAD']}</span> to <span className="stack-name-expl">{stackNamesHTML['POP']}</span>)</>)
             case 'FLIP':
                 let stack1 = move.stacks[0];
                 let stack2 = move.stacks[1];
                 return (<>Move {move.val} from <span className="stack-name-expl">{stackNamesHTML[stack1]}</span> to <span className="stack-name-expl">{stackNamesHTML[stack2]}</span></>);
-            case 'END TRANSFER':
-                return (<>End transfer mode</>);
+            case 'END TRANSFER 1':
+                return (<>End transfer mode (1): (assign <span className="stack-name-expl">{stackNamesHTML['INS']}</span> to <span className="stack-name-expl">{stackNamesHTML['INS2']}</span>)</>);
+            case 'END TRANSFER 2':
+                return (<>End transfer mode (2): (assign <span className="stack-name-expl">{stackNamesHTML['POP']}</span> to <span className="stack-name-expl">{stackNamesHTML['POP2']}</span>)</>);
+            case 'END TRANSFER 3':
+                return (<>End transfer mode (3): (assign <span className="stack-name-expl">{stackNamesHTML['INS2']}</span>, <span className="stack-name-expl">{stackNamesHTML['POP2']}</span>, <span className="stack-name-expl">{stackNamesHTML['POPrev']}</span>, <span className="stack-name-expl">{stackNamesHTML['HEAD']}</span> to null)</>);
             case 'CREATE':
                 return <>Create queue</>;
             default:
-                return <>Unknown move</>;
+                return <></>;
         }
     }
 
@@ -61,28 +65,64 @@ class StacksView extends React.Component {
 
     render() {
         const move = this.props.move;
-
-
+        const move_type = move.move_type;
+        console.log("move: ", move);
         const moveNum = this.props.moveNum;
         const numMoves = this.props.numMoves;
         const setMoveNum = this.props.setMoveNum;
         const stacks = stackNames.map(
             (name) => {
-                const s = move.new_queue[name];
+
+                let enter = (move_type == 'PUSH' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[1] == name) || (move_type == 'BEGIN TRANSFER' && name == 'HEAD') || (move_type == 'END TRANSFER 1' && name == 'INS') || (move_type == 'END TRANSFER 2' && name == 'POP');
+                let exit = (move_type == 'POP' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[0] == name) || (move_type == 'END TRANSFER 3' && (name == 'POPrev' || name == 'HEAD' || name == 'INS2' || name == 'POP2'));
+                let copy = (move_type == 'BEGIN TRANSFER' && name == 'POP') || (move_type == 'END TRANSFER 1' && name == 'INS2') || (move_type == 'END TRANSFER 2' && name == 'POP2');
+                let onlyLast = (move_type == 'PUSH' || move_type == 'POP' || move_type == 'FLIP');
+
+                let s = exit ? move.old_queue[name] : move.new_queue[name];
+
+                const elements = s.listAllElements();
+                const elements_disp = elements.map((e, i) => {
+                    let isLast = (i == elements.length - 1);
+                    let affected = !onlyLast || (onlyLast && isLast);
+
+                    let fade_class = "";
+                    let color = "white";
+                    let on_anim_end = () => { };
+
+                    if (affected && enter) {
+                        fade_class = "fade-in";
+                        color = "aquamarine";
+                    } else if (affected && exit) {
+                        fade_class = "fade-out";
+                        color = "indianred";
+                        on_anim_end = (event) => { event.target.style.display = "none";};
+                    } else if (affected && copy) {
+                        color = "deepskyblue";
+                    } 
+                    return (
+                        <span className={fade_class} onAnimationEnd={on_anim_end} key={this.props.opNum + moveNum + i + name}>
+                            <ArrowLeftOutlined />
+                            <div
+                                className="element"
+                                style={{ backgroundColor: color }}
+                                onAnimationEnd={(event) => {event.target.style.backgroundColor = "white";}}
+                            >
+                                {e}
+                            </div>
+                        </span>);
+                });
                 const nameHTML = stackNamesHTML[name];
                 return (
-                    <div className="stackDiv" style={{ backgroundColor: move.stacks.includes(name) ? 'aquamarine' : 'white', height: '40px' }}>
+                    <div className="stackDiv" key={move + "-" + name + "-stack"}>
                         <div className="element-null">&bull;</div>
-                        {s.listAllElements().map((e, i) =>
-                            <><ArrowLeftOutlined /><div className="element">{e}</div></>
-                        )}
+                        {elements_disp}
                         <ArrowLeftOutlined /> <span className="stack-name">{nameHTML} </span>
                     </div>)
             }
         );
         const move_number = (
             <div>
-                <StepBackwardOutlined onClick={() => setMoveNum(moveNum - 1)} /> {moveNum + 1}/{numMoves} <StepForwardOutlined onClick={() => setMoveNum(moveNum + 1)} />
+                <StepBackwardOutlined onClick={() => setMoveNum(moveNum - 1)} /> {moveNum + 1}/{numMoves} <StepForwardOutlined onClick={() => setMoveNum(moveNum + 1, numMoves)} />
             </div>
         );
         const speed_select = (
@@ -94,14 +134,14 @@ class StacksView extends React.Component {
                 </Select>
             </div>
         );
-        const speed_slider = (<div> 
+        const speed_slider = (<div>
             Speed: <input type="range" id="speed-range" value={this.props.speed} onChange={this.onSpeedChange}></input>
         </div>
         );
         return (
             <div>
                 {move_number}
-                <p className="explanation">{this.showExplanation()}</p>
+                <p className="explanation" style={{ height: '25px' }}>{this.showExplanation()}</p>
                 {/* <div className={this.state.hidden2}> */}
                 <div>
                     {stacks}
@@ -113,7 +153,6 @@ class StacksView extends React.Component {
             </div>
         )
     }
-
 }
 
 export { StacksView }

@@ -83,7 +83,6 @@ class App extends React.Component {
     };
 
     pop = () => {
-        const original = { new_queue: this.curQueue(), move_type: "", stacks: [] };
         const moves = [];
 	    console.log("head:", Queue.head(this.curQueue()));
         const q = Queue.pop(this.curQueue(), moves);
@@ -97,6 +96,7 @@ class App extends React.Component {
     // only should be called for button presses, not internally
     setMoveNum = (i) => {
         if (i >= 0 && i < this.curOp().length) {
+        // if (i >= 0 && i < this.curOp().length) {
             this.setState({moveNum: i});
             clearInterval(this.interval);
         }
@@ -131,7 +131,7 @@ class App extends React.Component {
         };
         const speed = this.state.speed;
         const x = 10 + speed;
-        const waittime = 50000/x;
+        const waittime = 100000/x;
         this.interval = setInterval(handleInterval, waittime);
     }
 
@@ -157,13 +157,16 @@ class App extends React.Component {
     }
 
     render() {
+        // let op = this.curOp();
+        // let moveNum = this.state.moveNum;
+        // let move = op[moveNum];
+
         const op = this.curOp();
         const moveNum = this.state.moveNum;
         const move = op[moveNum];
         let versionView;
         if (this.state.displayLinear) {
             versionView = <Versions queues={this.state.queues} parents={this.state.parents} cur={this.state.cur} setVersion={this.setVersion}></Versions>;
-            
         } else {
             versionView = <Graph data={this.graphData} width={600} height={400} setVersion={this.setVersion} queues={this.state.queues} cur={this.state.cur} root={this.root}/>;
             console.log('graph');
@@ -172,16 +175,16 @@ class App extends React.Component {
         return (
             <div className="App">
                 <Row type="flex" align="middle" justify="center">
-                    <Col span={16} offset={4}><div class="title"><Title>Functional Queue Visualizer</Title></div></Col>
+                    <Col span={16} offset={4}><div className="title"><Title>Functional Queue Visualizer</Title></div></Col>
                     <Col span={4}><Button onClick={() => this.openNotificationWithIcon('info')} shape="circle" icon={<InfoOutlined />} style={{display:this.state.notificationButtonVisible ? "" : "none"}}></Button></Col>
                 </Row>
-
+                
                 <InputComponent push={this.push} pop={this.pop} disabled={this.curQueue().size === 0}></InputComponent>
 
                 <div className="stacks">
                     <h2> Stacks </h2>
                     <div id="stacksID">
-                    <StacksView move={move} moveNum={moveNum} numMoves={op.length} setMoveNum={this.setMoveNum} setStepMode={this.setStepMode} setSpeed={this.setSpeed} stepMode={this.state.stepMode}> </StacksView>
+                    <StacksView move={move} moveNum={moveNum} numMoves={op.length} setMoveNum={this.setMoveNum} setStepMode={this.setStepMode} setSpeed={this.setSpeed} stepMode={this.state.stepMode}> opNum={this.state.ops.length}> </StacksView>
                     </div>
                 </div>
                 <br/>
