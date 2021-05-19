@@ -56,8 +56,8 @@ class App extends React.Component {
     }
 
     // only should be called for button presses, not internally
-    setMoveNum = (i, opLength) => {
-        if (i >= 0 && i < opLength) {
+    setMoveNum = (i) => {
+        if (i >= 0 && i < this.curOp().length) {
         // if (i >= 0 && i < this.curOp().length) {
             this.setState({moveNum: i});
             clearInterval(this.interval);
@@ -67,7 +67,7 @@ class App extends React.Component {
     setStepMode = (stepMode) => {
         this.setState({stepMode: stepMode});
         
-        const numMoves = this.curOp().length+1;
+        const numMoves = this.curOp().length;
 	    if (stepMode == "end") this.setState({moveNum: numMoves - 1});
         else if (stepMode == "auto") {
             this.runAuto();
@@ -82,12 +82,7 @@ class App extends React.Component {
     runAuto = () => {
         const handleInterval = () => {
             console.log("running");
-            const curOp = this.curOp(); 
-            let numMoves = curOp.length;
-            if (curOp[0].move_type==='BEGIN TRANSFER' || curOp[0].move_type==='FLIP') {
-                numMoves = curOp.length+1; 
-            }
-            // const numMoves = this.curOp().length+1;
+            const numMoves = this.curOp().length;
             const moveNum = this.state.moveNum;
             if (moveNum + 1 < numMoves) {
                 this.setState({moveNum: moveNum + 1});
@@ -125,29 +120,9 @@ class App extends React.Component {
         // let moveNum = this.state.moveNum;
         // let move = op[moveNum];
 
-        let op = this.curOp(); 
-        let moveNum = this.state.moveNum; 
-        let move; 
-        let new_op = []; 
-        let eArray = []; 
-        let explanation; 
-
-        for (let i=0; i<op.length; i++) {
-            eArray.push(op[i])
-        }
-        if (op[0].move_type === 'BEGIN TRANSFER' || op[0].move_type==='FLIP') {
-        new_op.push(op[0]); 
-        new_op = new_op.concat(op); 
-        eArray.push({move_type: '', stacks: [], new_queue: new_op[new_op.length-1].new_queue});
-        move = new_op[moveNum]; 
-        explanation = eArray[moveNum];
-        } 
-        else {
-            new_op = new_op.concat(op); 
-            move = new_op[moveNum];
-            explanation = eArray[moveNum];
-        }
-        console.log("stuff", new_op, moveNum);
+        const op = this.curOp();
+        const moveNum = this.state.moveNum;
+        const move = op[moveNum];
 
         return (
             <div className="App">
@@ -161,7 +136,7 @@ class App extends React.Component {
                 <div className="stacks">
                     <h2> Stacks </h2>
                     <div id="stacksID">
-                    <StacksView move={move} explanation={explanation} moveNum={moveNum} numMoves={new_op.length} setMoveNum={this.setMoveNum} setStepMode={this.setStepMode} setSpeed={this.setSpeed} stepMode={this.state.stepMode}> </StacksView>
+                    <StacksView move={move} moveNum={moveNum} numMoves={op.length} setMoveNum={this.setMoveNum} setStepMode={this.setStepMode} setSpeed={this.setSpeed} stepMode={this.state.stepMode}> </StacksView>
                     </div>
                 </div>
 

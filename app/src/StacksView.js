@@ -26,7 +26,7 @@ class StacksView extends React.Component {
     }
 
     showExplanation = () => {
-        const move = this.props.explanation;
+        const move = this.props.move;
         switch (move.move_type) {
             case 'PUSH':
                 let pushStack = move.stacks[0];
@@ -61,8 +61,7 @@ class StacksView extends React.Component {
 
     render() {
         const move = this.props.move;
-        console.log("move: ", move); 
-        const explanation = this.props.explanation; 
+        console.log("move: ", move);
         const moveNum = this.props.moveNum;
         const numMoves = this.props.numMoves;
         const setMoveNum = this.props.setMoveNum;
@@ -73,25 +72,19 @@ class StacksView extends React.Component {
                 return (
                     <div className="stackDiv">
                         <div className="element-null">&bull;</div>
-                        {s.listAllElements().map((e, i) =>
-                            {
-                                const fade_in = ((move.stacks.includes(name) && move.val === e) || 
-                                (explanation.stacks.includes(name) && explanation.val === e));
-                                return (
+                        {s.listAllElements().map((e, i) => {
+                            const fade_in = (move.stacks.includes(name) && move.val === e);
+                            return (
                                 <>
-                                <ArrowLeftOutlined key={move+"-"+explanation+"-"+moveNum+"-"+e+"-arrow"}/>
-                                <div 
-                                    className={fade_in ? "element fade-in" : "element"}
-                                    key={move+"-"+explanation+"-"+moveNum+"-"+e+"-div"}
-                                    style={{
-                                        backgroundColor: (move.stacks.includes(name) && move.val === e) ||
-                                                        (explanation.stacks.includes(name) && explanation.val === e) ? 
-                                                        'aquamarine' : 'white'
-                                    }}>
+                                    <ArrowLeftOutlined key={move + "-" + moveNum + "-" + e + "-arrow"} />
+                                    <div
+                                        className={fade_in ? "element fade-in" : "element"}
+                                        key={move + "-" + moveNum + "-" + e + "-div"}
+                                        style={{ backgroundColor: fade_in ? 'aquamarine' : 'white' }}>
                                         {e}
-                                </div>
+                                    </div>
                                 </>);
-                            }
+                        }
                         )}
                         <ArrowLeftOutlined /> <span className="stack-name">{nameHTML} </span>
                     </div>)
@@ -99,7 +92,7 @@ class StacksView extends React.Component {
         );
         const move_number = (
             <div>
-                <StepBackwardOutlined onClick={() => setMoveNum(moveNum - 1, numMoves)} /> {moveNum + 1}/{numMoves} <StepForwardOutlined onClick={() => setMoveNum(moveNum + 1, numMoves)} />
+                <StepBackwardOutlined onClick={() => setMoveNum(moveNum - 1)} /> {moveNum + 1}/{numMoves} <StepForwardOutlined onClick={() => setMoveNum(moveNum + 1, numMoves)} />
             </div>
         );
         const speed_select = (
@@ -111,14 +104,14 @@ class StacksView extends React.Component {
                 </Select>
             </div>
         );
-        const speed_slider = (<div> 
+        const speed_slider = (<div>
             Speed: <input type="range" id="speed-range" value={this.props.speed} onChange={this.onSpeedChange}></input>
         </div>
         );
         return (
             <div>
                 {move_number}
-                <p className="explanation" style={{height: '25px'}}>{this.showExplanation()}</p>
+                <p className="explanation" style={{ height: '25px' }}>{this.showExplanation()}</p>
                 {/* <div className={this.state.hidden2}> */}
                 <div>
                     {stacks}
