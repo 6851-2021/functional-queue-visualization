@@ -35,16 +35,16 @@ class Versions extends React.Component {
             const spanClass = "version-ref" + (i == cur || ancs.includes(i)  ? " current-version": "");
 
             const fakeqelems = qelems.slice(1, qelems.length);
-            let qelems_list = fakeqelems.join(" -> ");
+            let qelems_list = fakeqelems.join(", ");
             if (qelems.length > 6) {
                 const L1 = fakeqelems.slice(0,2);
                 const L2 = fakeqelems.slice(fakeqelems.length - 3, fakeqelems.length);
-                qelems_list = L1.join(" -> ") + " ... " + L2.join(" -> ");
+                qelems_list = L1.join(", ") + ", ... ," + L2.join(", ");
             }
 
             let qelems_elem;
             if (qelems.length > 0) {
-                qelems_elem = (<>// has elements <b>{qelems[0]}</b>{(qelems.length > 1) ? " -> " : ""}{qelems_list}</>)
+                qelems_elem = (<>// has elements <b>{qelems[0]}</b>{(qelems.length > 1) ? ", " : ""}{qelems_list}</>)
             } else {
                 qelems_elem = "// is empty";
             }

@@ -92,6 +92,7 @@ class App extends React.Component {
     setVersion = (i) => {
         this.setState({cur: i, moveNum: 0});
         clearInterval(this.interval);
+        if (this.state.stepMode == "auto") this.runAuto();
     }
 
     // only should be called for button presses, not internally
@@ -165,6 +166,7 @@ class App extends React.Component {
         const op = this.curOp();
         const moveNum = this.state.moveNum;
         const move = op[moveNum];
+        
         let versionView;
         if (this.state.displayLinear) {
             versionView = <Versions queues={this.state.queues} parents={this.state.parents} cur={this.state.cur} setVersion={this.setVersion}></Versions>;
@@ -173,21 +175,17 @@ class App extends React.Component {
             console.log('graph');
         }
 
-        const clickVersion = (i) => {
-            this.setVersion(i);
-            if (this.state.stepMode == "auto") this.runAuto();
-        };
-
         return (
             <div className="App">
-                
+                 
                 <Row type="flex" align="middle" justify="center">
                     <Col span={16} offset={4}><div className="title"><Title>Functional Queue Visualizer</Title></div></Col>
                     <Col span={4}><Button onClick={() => this.openNotificationWithIcon('info')} shape="circle" icon={<InfoOutlined />} style={{display:this.state.notificationButtonVisible ? "" : "none"}}></Button></Col>
                 </Row>
 
                 <InputComponent push={this.push} pop={this.pop} disabled={this.curQueue().size === 0}></InputComponent>
-                <div className="stacks">
+                <h2> Stack Operations </h2>
+		<div className="stacks">
                     <div id="stacksID">
                     <StacksView move={move} moveNum={moveNum} numMoves={op.length} setMoveNum={this.setMoveNum} setStepMode={this.setStepMode} setSpeed={this.setSpeed} stepMode={this.state.stepMode}> opNum={this.state.ops.length}> </StacksView>
                     </div>
