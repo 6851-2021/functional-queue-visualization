@@ -17,7 +17,7 @@ class InputComponent extends React.Component {
 
 
     handlePush(event) { 
-	const value = this.state.value;
+	    const value = this.state.value;
         this.props.push(value == '' ? '?' : value);
         this.setState({value: ''});
     }
@@ -38,14 +38,14 @@ class InputComponent extends React.Component {
                 <Search
                     placeholder="input number to insert"
                     allowClear
-                    enterButton="Insert"
+                    enterButton="Push"
                     size="medium"
                     value={this.state.value}
                     onChange={this.handleChange}
                     onSearch={this.handlePush}
                     maxLength="2"
                 />
-                <Button type="primary" danger onClick={this.handlePop} disabled={this.props.disabled}>Delete</Button>
+                <Button type="primary" danger onClick={this.handlePop} disabled={this.props.disabled}>Pop</Button>
                 
             </Space>
             </div>

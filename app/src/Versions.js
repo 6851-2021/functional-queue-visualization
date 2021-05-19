@@ -16,6 +16,7 @@ class Versions extends React.Component {
 
         for (let i = 0; i < this.props.queues.length; i++) {
             const q = this.props.queues[i];
+            const qelems = Queue.listAllElements(q);
             const parent = this.props.parents[i];
 
             let code;            
@@ -26,7 +27,6 @@ class Versions extends React.Component {
             if (parent == -1) {
                 code = <> {left_queue} = EmptyQueue() </>
             } else if (Queue.size(this.props.queues[parent]) < Queue.size(q)) {
-                const qelems = Queue.listAllElements(q);
                 code = <> {left_queue} = Push({right_queue}, {qelems[qelems.length - 1]}) </>
             } else {
                 code = <> {left_queue} = Pop({right_queue}) </>
@@ -34,10 +34,25 @@ class Versions extends React.Component {
 
             const spanClass = "version-ref" + (i == cur || ancs.includes(i)  ? " current-version": "");
 
+            const fakeqelems = qelems.slice(1, qelems.length);
+            let qelems_list = fakeqelems.join(" -> ");
+            if (qelems.length > 6) {
+                const L1 = fakeqelems.slice(0,2);
+                const L2 = fakeqelems.slice(fakeqelems.length - 3, fakeqelems.length);
+                qelems_list = L1.join(" -> ") + " ... " + L2.join(" -> ");
+            }
+
+            let qelems_elem;
+            if (qelems.length > 0) {
+                qelems_elem = (<>// has elements <b>{qelems[0]}</b>{(qelems.length > 1) ? " -> " : ""}{qelems_list}</>)
+            } else {
+                qelems_elem = "// is empty";
+            }
+
             const version =
                 <div key={i} id={"version_" + i}>
                     <code className={spanClass} onClick={() => this.props.setVersion(i)}>
-                        > {code}
+                        > {code} <span style={{color: "grey"}}> {(i == cur || ancs.includes(i)) && qelems_elem}</span>
                     </code>
                 </div>;
             versions.push(version);
