@@ -4,7 +4,7 @@ import { Group } from '@vx/group';
 import Node from './Node';
 import { getTopLeft } from './utils';
 
-function Nodes({ nodes, layout, orientation, onNodeClick }) {
+function Nodes({ nodes, layout, orientation, cur, onNodeClick }) {
   return (
     <Fragment>
       { nodes.map((node, i) => (
@@ -13,6 +13,7 @@ function Nodes({ nodes, layout, orientation, onNodeClick }) {
             node={node}
             layout={layout}
             orientation={orientation}
+            cur = {cur}
             onClick={() => onNodeClick(node)}
           />
         </Group>

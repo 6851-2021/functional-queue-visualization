@@ -8,6 +8,7 @@ import { Tree } from '@vx/hierarchy';
 import Links from "./Links";
 import Nodes from "./Nodes";
 import { select } from 'd3-selection';
+import { NodeExpandOutlined } from '@ant-design/icons';
 
 class Graph extends React.Component {
 
@@ -15,7 +16,7 @@ class Graph extends React.Component {
         layout: "cartesian",
         orientation: "vertical",
         linkType: "diagonal",
-        stepPercent: 0.5
+        stepPercent: 0.5,
     };
 
     render() {
@@ -76,11 +77,8 @@ class Graph extends React.Component {
                         nodes={data.descendants()}
                         layout={layout}
                         orientation={orientation}
+                        cur={this.props.cur}
                         onNodeClick={(node) => {
-                            // console.log('select',select("#" + node.name)); //.select("circle"));
-                            // select("#" + node.name).select("rect").style("fill", "pink");
-
-                            console.log(node);
                             this.props.setVersion(node.id);
                             this.forceUpdate();
                         }}

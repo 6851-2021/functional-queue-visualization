@@ -1,31 +1,25 @@
 import React, { Fragment } from 'react';
 import { Group } from '@vx/group';
 
-function Node({ node, onClick }) {
-  const width = 40;
+function Node({ node, cur, onClick }) {
+  const width = 30;
   const height = 20;
+  const inFocus = node.data.name===cur.toString();
 
   return (
     <Fragment>
-      {node.depth === 0 && (
-        <circle
-          r={12}
-          fill="url('#lg')"
-          onClick={onClick}
-        />
-      )}
-      {node.depth !== 0 && (
+      {(
         <rect
           height={height}
           width={width}
           y={-height / 2}
           x={-width / 2}
-          fill={'#272b4d'}
-          stroke={node.data.children ? '#03c0dc' : '#26deb0'}
-          strokeWidth={1}
-          strokeDasharray={!node.data.children ? '2,2' : '0'}
-          strokeOpacity={!node.data.children ? 0.6 : 1}
-          rx={!node.data.children ? 10 : 0}
+          fill={inFocus ? 'darkgreen' : '#d6dee1'}
+          stroke={"black"}
+          strokeWidth={inFocus ? 2 : 1}
+          strokeOpacity={inFocus ? 1 : 0.6}
+          rx={7} 
+          ry={7}
           onClick={onClick}
         />
       )}
@@ -35,17 +29,9 @@ function Node({ node, onClick }) {
         fontFamily="Arial"
         textAnchor={'middle'}
         style={{ pointerEvents: 'none' }}
-        fill={
-          node.depth === 0 ? (
-            '#71248e'
-          ) : node.children ? (
-            'white'
-          ) : (
-                '#26deb0'
-              )
-        }
+        fill={inFocus? "white" : '#2b3e51'}
       >
-        {node.data.name}
+        Q{node.data.name}
       </text>
     </Fragment>
   );
