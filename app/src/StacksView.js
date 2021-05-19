@@ -147,7 +147,6 @@ class StacksView extends React.Component {
             <div>
                 {move_number}
                 <p className="explanation"><i>{this.showExplanation()}</i></p>
-                {/* <div className={this.state.hidden2}> */}
                 <div>
                     {stacks}
                 </div>
