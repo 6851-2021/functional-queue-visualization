@@ -7,7 +7,7 @@ import "antd/dist/antd.css";
 
 const { Option } = Select;
 
-const stackNames = ['INS', 'POP', 'POPrev', 'POP2', 'INS2', 'HEAD'];
+const stackNames = ['INS', 'POP', 'POPrev', 'INS2', 'POP2', 'HEAD'];
 const stackNamesHTML = {
     'INS': (<>INS</>),
     'POP': (<>POP</>),
@@ -37,13 +37,17 @@ class StacksView extends React.Component {
                 let popStack = move.stacks[0];
                 return (<>Pop {move.val} from <span className="stack-name-expl">{stackNamesHTML[popStack]}</span></>);
             case 'BEGIN TRANSFER':
-                return (<>Enter transfer mode</>)
+                return (<>Enter transfer mode (assign <span className="stack-name-expl">{stackNamesHTML['HEAD']}</span> to <span className="stack-name-expl">{stackNamesHTML['POP']}</span>)</>)
             case 'FLIP':
                 let stack1 = move.stacks[0];
                 let stack2 = move.stacks[1];
                 return (<>Move {move.val} from <span className="stack-name-expl">{stackNamesHTML[stack1]}</span> to <span className="stack-name-expl">{stackNamesHTML[stack2]}</span></>);
-            case 'END TRANSFER':
-                return (<>End transfer mode</>);
+            case 'END TRANSFER 1':
+                return (<>End transfer mode (1): (assign <span className="stack-name-expl">{stackNamesHTML['INS']}</span> to <span className="stack-name-expl">{stackNamesHTML['INS2']}</span>)</>);
+            case 'END TRANSFER 2':
+                return (<>End transfer mode (2): (assign <span className="stack-name-expl">{stackNamesHTML['POP']}</span> to <span className="stack-name-expl">{stackNamesHTML['POP2']}</span>)</>);
+            case 'END TRANSFER 3':
+                return (<>End transfer mode (3): (assign <span className="stack-name-expl">{stackNamesHTML['INS2']}</span>, <span className="stack-name-expl">{stackNamesHTML['POP2']}</span>, <span className="stack-name-expl">{stackNamesHTML['POPrev']}</span>, <span className="stack-name-expl">{stackNamesHTML['HEAD']}</span> to null)</>);
             case 'CREATE':
                 return <>Create queue</>;
             default:
@@ -69,30 +73,32 @@ class StacksView extends React.Component {
         const stacks = stackNames.map(
             (name) => {
 
-                let enter = (move_type == 'PUSH' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[1] == name) || (move_type == 'BEGIN TRANSFER' && name == 'HEAD');
-                let exit = (move_type == 'POP' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[0] == name);
+                let enter = (move_type == 'PUSH' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[1] == name) || (move_type == 'BEGIN TRANSFER' && name == 'HEAD') || (move_type == 'END TRANSFER 1' && name == 'INS') || (move_type == 'END TRANSFER 2' && name == 'POP');
+                let exit = (move_type == 'POP' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[0] == name) || (move_type == 'END TRANSFER 3' && (name == 'POPrev' || name == 'HEAD' || name == 'INS2' || name == 'POP2'));
+                let copy = (move_type == 'BEGIN TRANSFER' && name == 'POP') || (move_type == 'END TRANSFER 1' && name == 'INS2') || (move_type == 'END TRANSFER 2' && name == 'POP2');
+                let onlyLast = (move_type == 'PUSH' || move_type == 'POP' || move_type == 'FLIP');
 
                 let s = exit ? move.old_queue[name] : move.new_queue[name];
 
                 const elements = s.listAllElements();
                 const elements_disp = elements.map((e, i) => {
                     let isLast = (i == elements.length - 1);
-                    let affected = ((move_type == 'PUSH' || move_type == 'POP' || move_type == 'FLIP') && isLast); // only used for PUSH/POP/FLIP
+                    let affected = !onlyLast || (onlyLast && isLast);
+
                     let fade_class = "";
                     let color = "white";
                     let on_anim_end = () => { };
 
-                    if (affected && enter || (move_type == 'BEGIN TRANSFER' && name == 'HEAD')) {
+                    if (affected && enter) {
                         fade_class = "fade-in";
                         color = "aquamarine";
                     } else if (affected && exit) {
                         fade_class = "fade-out";
                         color = "indianred";
                         on_anim_end = (event) => { event.target.style.display = "none";};
-                    } else if (move_type == 'BEGIN TRANSFER' && name == 'POP') {
+                    } else if (affected && copy) {
                         color = "deepskyblue";
-                    }
-                    console.log("meow", move + moveNum + i + name);
+                    } 
                     return (
                         <span className={fade_class} onAnimationEnd={on_anim_end} key={this.props.opNum + moveNum + i + name}>
                             <ArrowLeftOutlined />

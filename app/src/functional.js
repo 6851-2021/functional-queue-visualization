@@ -151,10 +151,18 @@ class Queue {
 	}
 
 	static endTransfer(q, moves) {
-		let newPOP = q.POP2; // ASSIGN POP to POP2
 		let newINS = q.INS2; // ASSIGN INS to INS2
+		var q_new = new Queue(newINS, q.POP, q.POPrev, q.POP2, q.INS2, q.HEAD, q.transferOps, q.size);
+		moves.push({ new_queue: q_new, old_queue: q, move_type: "END TRANSFER 1", stacks: [] });
+		q = q_new;
+
+		let newPOP = q.POP2; // ASSIGN POP to POP2
+		var q_new = new Queue(newINS, newPOP, q.POPrev, q.POP2, q.INS2, q.HEAD, q.transferOps, q.size);
+		moves.push({ new_queue: q_new, old_queue: q, move_type: "END TRANSFER 2", stacks: [] });
+		q = q_new;
+
 		var q_new = Queue.normalQueue(newINS, newPOP, q.size);
-		moves.push({ new_queue: q_new, old_queue: q, move_type: "END TRANSFER", stacks: [] });
+		moves.push({ new_queue: q_new, old_queue: q, move_type: "END TRANSFER 3", stacks: [] });
 		q = q_new;
 		return q;
 	}
