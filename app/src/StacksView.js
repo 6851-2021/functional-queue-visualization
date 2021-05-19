@@ -69,23 +69,32 @@ class StacksView extends React.Component {
             (name) => {
                 const s = move.new_queue[name];
                 const nameHTML = stackNamesHTML[name];
+                const elements = s.listAllElements();
+                const elements_disp = s.listAllElements().map((e, i) => {
+                    let fade_in = false;
+                    let fade_out = false;//(move.stacks.includes(name) && move.val === e);
+                    switch (move.move_type) {
+                        case 'PUSH':
+                            if (name == move.stacks[0] && i == elements.length - 1) fade_in = true;
+                        case 'POP':
+                            if (name == move.stacks[1] && i == elements.length - 1) fade_in = true;
+                            if (name == move.stacks[0] && i == elements.length - 1) fade_in = true;
+                    }
+                    return (
+                        <>
+                            <ArrowLeftOutlined key={move + "-" + moveNum + "-" + e + "-arrow"} />
+                            <div
+                                className={fade_in ? "element fade-in" : "element"}
+                                key={move + "-" + moveNum + "-" + e + "-div"}
+                                style={{ backgroundColor: fade_in ? 'aquamarine' : 'white' }}>
+                                {e}
+                            </div>
+                        </>);
+                });
                 return (
                     <div className="stackDiv">
                         <div className="element-null">&bull;</div>
-                        {s.listAllElements().map((e, i) => {
-                            const fade_in = (move.stacks.includes(name) && move.val === e);
-                            return (
-                                <>
-                                    <ArrowLeftOutlined key={move + "-" + moveNum + "-" + e + "-arrow"} />
-                                    <div
-                                        className={fade_in ? "element fade-in" : "element"}
-                                        key={move + "-" + moveNum + "-" + e + "-div"}
-                                        style={{ backgroundColor: fade_in ? 'aquamarine' : 'white' }}>
-                                        {e}
-                                    </div>
-                                </>);
-                        }
-                        )}
+                        {elements_disp}
                         <ArrowLeftOutlined /> <span className="stack-name">{nameHTML} </span>
                     </div>)
             }
