@@ -11,12 +11,12 @@ class InputComponent extends React.Component {
         super(props);
         this.state = { value: ''};
         this.handleChange = this.handleChange.bind(this);
-        this.handlePush = this.handlePush.bind(this);
-        this.handlePop = this.handlePop.bind(this);
+        this.handleEnqueue = this.handleEnqueue.bind(this);
+        this.handleDequeue = this.handleDequeue.bind(this);
     }
 
 
-    handlePush(event) { 
+    handleEnqueue(event) { 
 	    const value = this.state.value;
         this.props.push(value == '' ? '?' : value);
         this.setState({value: ''});
@@ -26,7 +26,7 @@ class InputComponent extends React.Component {
         this.setState({ value: event.target.value });
     }
 
-    handlePop () {
+    handleDequeue () {
         this.props.pop();
     }
 
@@ -42,10 +42,10 @@ class InputComponent extends React.Component {
                     size="medium"
                     value={this.state.value}
                     onChange={this.handleChange}
-                    onSearch={this.handlePush}
+                    onSearch={this.handleEnqueue}
                     maxLength="2"
                 />
-                <Button type="primary" danger onClick={this.handlePop} disabled={this.props.disabled}>Dequeue</Button>
+                <Button type="primary" danger onClick={this.handleDequeue} disabled={this.props.disabled}>Dequeue</Button>
                 
             </Space>
             </div>

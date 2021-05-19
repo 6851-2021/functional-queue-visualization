@@ -79,17 +79,17 @@ class App extends React.Component {
         return this.state.ops[this.state.cur];
     }
 
-    push = (val) => {
+    enqueue = (val) => {
         const moves = [];
-        const q = Queue.push(this.curQueue(), val, moves);
+        const q = Queue.enqueue(this.curQueue(), val, moves);
         console.log("just pushed. moves are", moves);
         this.updateQueue(q, moves);
     };
 
-    pop = () => {
+    dequeue = () => {
         const moves = [];
 	    console.log("head:", Queue.head(this.curQueue()));
-        const q = Queue.pop(this.curQueue(), moves);
+        const q = Queue.dequeue(this.curQueue(), moves);
         this.updateQueue(q, moves);
     };
 
@@ -185,7 +185,7 @@ class App extends React.Component {
                     <Col span={4}><Button id="notif-button" onClick={() => this.openNotificationWithIcon('info')} shape="circle" icon={<InfoOutlined />} style={{display:this.state.notificationButtonVisible ? "" : "none"}}></Button></Col>
                 </Row>
 
-                <InputComponent push={this.push} pop={this.pop} disabled={this.curQueue().size === 0}></InputComponent>
+                <InputComponent push={this.enqueue} pop={this.dequeue} disabled={this.curQueue().size === 0}></InputComponent>
                 <h2> Stack Operations </h2>
 		<div className="stacks">
                     <div id="stacksID">
