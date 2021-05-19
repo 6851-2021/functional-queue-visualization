@@ -4,20 +4,34 @@ import { InputComponent } from "./Input";
 import { StacksView } from "./StacksView";
 import { Queue } from './functional';
 import { Versions } from './Versions';
+import { Graph } from './Graph';
 import { InfoOutlined } from '@ant-design/icons';
-import { Button, notification, Row, Col, Typography } from 'antd';
+import { Button, notification, Row, Col, Typography, Switch } from 'antd';
 
+import { hierarchy } from 'd3-hierarchy';
 
 const { Title } = Typography;
 const info_description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ac nisl elementum, venenatis eros quis, laoreet tellus. Aenean vel fermentum lectus. Duis pulvinar fringilla orci, et dignissim turpis ultrices dignissim. Interdum et malesuada fames ac ante ipsum primis in faucibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus accumsan ut libero ac mattis. Morbi elementum enim sed risus imperdiet, eu consectetur erat faucibus. Curabitur imperdiet et ante nec aliquam. Suspendisse in nibh maximus tellus fermentum sollicitudin in at augue. Maecenas mollis mattis quam tristique placerat. Vestibulum eget lobortis risus. Nullam vitae suscipit ex, faucibus blandit ligula. Duis lobortis nulla et mollis fringilla. Nulla tempus, lacus aliquet consectetur facilisis, ex eros rutrum libero, eu suscipit ipsum turpis vel lorem. Vivamus mollis facilisis risus quis auctor. Duis scelerisque vestibulum leo. Etiam magna tortor, venenatis tincidunt dignissim eu, mollis vel ipsum. Morbi sagittis odio quis magna bibendum luctus. Sed fringilla eros id ligula iaculis faucibus. Donec vehicula vestibulum felis a interdum. Quisque sagittis, erat a pretium feugiat, mi magna tempus orci, nec pretium tellus neque eget erat. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec sagittis elit at ligula vehicula, eu pellentesque turpis mollis. Cras mi arcu, lacinia sed vulputate quis, mollis quis enim. Maecenas scelerisque maximus est, sit amet commodo massa sodales vitae. Vestibulum hendrerit luctus euismod. Proin et erat vestibulum elit mattis pharetra. Integer ultrices commodo dui, eu vehicula lectus pulvinar quis. In sodales orci lectus, quis euismod nulla rhoncus nec. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec ac metus nunc. Nulla posuere nisl vitae congue feugiat. Phasellus ac purus eget diam dignissim pellentesque et non tellus. In commodo efficitur elementum. Vivamus mollis ante eget gravida lobortis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam fringilla laoreet sapien, et pellentesque ligula consectetur at. Aliquam sed pellentesque leo. Nulla vel risus justo. Fusce facilisis semper dui, sed semper ante tincidunt sed. Donec non dictum ipsum. Praesent commodo ipsum quam, at mattis velit mattis vitae. Vestibulum varius commodo felis ut consequat. Suspendisse nec nunc egestas, dictum ante nec, accumsan erat. Suspendisse lorem metus, commodo vitae volutpat aliquet, vehicula vitae velit. Praesent rhoncus turpis urna, nec pharetra arcu condimentum non. Sed ut arcu et dui faucibus pulvinar a quis purus. Donec et porta sapien. Etiam auctor eu mi ac iaculis.";
+
 class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { queues: [Queue.emptyQueue()], parents: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]],  moveNum: 0, stepMode: "auto", speed: 50, notificationButtonVisible: true};
+        this.state = { queues: [Queue.emptyQueue()], parents: [-1], cur: 0, ops: [[{ new_queue: Queue.emptyQueue(), move_type: "CREATE", stacks: [] }]],  moveNum: 0, stepMode: "auto", speed: 50, notificationButtonVisible: true, displayLinear:true};
+        this.graphData =  {
+            name: "Q0",
+            children: [
+            ]
+        };
+        this.root = hierarchy(this.graphData, d => (this.graphData.children));
+        this.root.id = 0;
+        this.hashmap = {'0':this.root}; // idx: node
     }
 
     updateQueue = (q, moves) => {
+        const newIdx = this.state.queues.length;
+        const parentIdx = this.state.cur;
+        
         const queues = this.state.queues.concat([q]);
         const ops = this.state.ops.concat([moves]);
         const parents = this.state.parents.concat([this.state.cur]);
@@ -26,6 +40,31 @@ class App extends React.Component {
         this.setState({ queues: queues, parents: parents, cur: queues.length - 1, ops: ops, moveNum: (this.state.stepMode == "end" ? num_moves - 1: 0)});
         clearInterval(this.interval);
         if (this.state.stepMode == "auto") this.runAuto();
+
+        this.updateGraph(parentIdx, newIdx);
+    }
+    
+    updateGraph = (parentIdx, newIdx) => {
+        let parentNode = this.hashmap[parentIdx];
+        console.log('parent node is ', parentNode);
+        
+        var newNodeObj = {
+            name: "Q" + newIdx.toString(),
+            attributes: [],
+            children: []
+        };
+        var newNode = hierarchy(newNodeObj);
+        newNode.depth = parentNode.depth + 1; 
+        newNode.height = parentNode.height - 1;
+        newNode.parent = parentNode; 
+        newNode.id = newIdx;
+        this.hashmap[newIdx] = newNode; 
+        if(!parentNode.children){
+            parentNode.children = [];
+            parentNode.data.children = [];
+        }
+        parentNode.children.push(newNode);
+        parentNode.data.children.push(newNode.data);
     }
 
     curQueue = () => {
@@ -45,7 +84,7 @@ class App extends React.Component {
 
     pop = () => {
         const moves = [];
-	console.log("head:", Queue.head(this.curQueue()));
+	    console.log("head:", Queue.head(this.curQueue()));
         const q = Queue.pop(this.curQueue(), moves);
         this.updateQueue(q, moves);
     };
@@ -98,12 +137,11 @@ class App extends React.Component {
     }
 
     notificationClose = () => {
-        this.state.notificationButtonVisible = true;
-        console.log(this.state.notificationButtonVisible);
+        this.setState({notificationButtonVisible: true});
     }
 
     openNotificationWithIcon = (type) => {
-        this.state.notificationButtonVisible = false;
+        this.setState({notificationButtonVisible: false});
         console.log(this.state.notificationButtonVisible);
         const key = "notification";
         notification[type]({
@@ -114,6 +152,10 @@ class App extends React.Component {
           onClose: this.notificationClose,
         });
     }
+    displayVersionView = (isLinear) => {
+        console.log('isLinear', isLinear);
+        this.setState({displayLinear: isLinear});
+    }
 
     render() {
         // let op = this.curOp();
@@ -123,6 +165,13 @@ class App extends React.Component {
         const op = this.curOp();
         const moveNum = this.state.moveNum;
         const move = op[moveNum];
+        let versionView;
+        if (this.state.displayLinear) {
+            versionView = <Versions queues={this.state.queues} parents={this.state.parents} cur={this.state.cur} setVersion={this.setVersion}></Versions>;
+        } else {
+            versionView = <Graph data={this.graphData} width={600} height={400} setVersion={this.setVersion} queues={this.state.queues} cur={this.state.cur} root={this.root}/>;
+            console.log('graph');
+        }
 
         const clickVersion = (i) => {
             this.setVersion(i);
@@ -140,17 +189,23 @@ class App extends React.Component {
                 <InputComponent push={this.push} pop={this.pop} disabled={this.curQueue().size === 0}></InputComponent>
                 <div className="stacks">
                     <div id="stacksID">
-                    <StacksView move={move} moveNum={moveNum} numMoves={op.length} setMoveNum={this.setMoveNum} setStepMode={this.setStepMode} setSpeed={this.setSpeed} stepMode={this.state.stepMode} opNum={this.state.ops.length}> </StacksView>
+                    <StacksView move={move} moveNum={moveNum} numMoves={op.length} setMoveNum={this.setMoveNum} setStepMode={this.setStepMode} setSpeed={this.setSpeed} stepMode={this.state.stepMode}> opNum={this.state.ops.length}> </StacksView>
                     </div>
                 </div>
-
-                <br />
-                
-                <div className="history" style={{ marginTop: '00px' }}>
-                    <Versions queues={this.state.queues} parents={this.state.parents} cur={this.state.cur} setVersion={clickVersion}></Versions>
-                </div>
-
-
+                <br/>
+                <div className="history">
+                    <Row type="flex" align="middle" justify="center">
+                        <Col span={4} offset={4}>
+                            <div class="title-h2"><h2> Versions </h2></div>
+                        </Col>
+                        <Col span={4}>
+                            <div class="toggleVersions"> 
+                                <Switch onClick={(checked) => this.displayVersionView(checked)} checkedChildren="linear" unCheckedChildren="graph" defaultChecked />
+                            </div>
+                        </Col> 
+                    </Row>
+                    {versionView}
+                </div>        
             </div>
         );
     }

@@ -6,6 +6,9 @@
 .title {
   margin-top: 15px;
 }
+.title-h2 {
+  margin-top: 10px;
+}
 
 .inputs {
   margin: 5px; 
@@ -247,8 +250,39 @@ code {
 }
 
 #versions-div:hover {
-  overflow-y: auto;
-  padding-right: 0px;
+  overflow-y: scroll;
+}
+
+.stacks{
+  /* float: right; */
+}
+
+.history {
+  /* float: left; */
+  margin-top: '00px';
+}
+
+.toggleVersions {
+  float: left;
+}
+
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
 }
 
 .head-elem {
