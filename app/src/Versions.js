@@ -39,7 +39,7 @@ class Versions extends React.Component {
             if (qelems.length > 6) {
                 const L1 = fakeqelems.slice(0,2);
                 const L2 = fakeqelems.slice(fakeqelems.length - 3, fakeqelems.length);
-                qelems_list = L1.join(", ") + ", ... ," + L2.join(", ");
+                qelems_list = L1.join(", ") + ", ... , " + L2.join(", ");
             }
 
             let qelems_elem;
@@ -65,8 +65,9 @@ class Versions extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.props.cur == this.props.queues.length - 1) {
+        if (this.props.cur == this.props.queues.length - 1 && this.props.queues.length != this.prevLength) {
             const element = document.getElementById("version_" + this.props.cur);
+	    this.prevLength = this.props.queues.length;
             element.parentNode.scrollTop = element.offsetTop;
         }
     }

@@ -186,7 +186,7 @@ class App extends React.Component {
                 </Row>
 
                 <InputComponent push={this.enqueue} pop={this.dequeue} disabled={this.curQueue().size === 0}></InputComponent>
-                <h2> Stack Operations </h2>
+                <h2> Functional Stacks </h2>
 		<div className="stacks">
                     <div id="stacksID">
                     <StacksView move={move} moveNum={moveNum} numMoves={op.length} setMoveNum={this.setMoveNum} setStepMode={this.setStepMode} setSpeed={this.setSpeed} stepMode={this.state.stepMode} opNum={this.state.ops.length}></StacksView>
@@ -196,7 +196,7 @@ class App extends React.Component {
                 <div className="history">
                     <Row type="flex" align="middle" justify="center">
                         <Col span={4} offset={4}>
-                            <div class="title-h2"><h2> Versions </h2></div>
+                            <div class="title-h2"><h2> Version History </h2></div>
                         </Col>
                         <Col span={4}>
                             <div class="toggleVersions"> 
