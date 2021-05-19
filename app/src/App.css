@@ -144,10 +144,10 @@ code {
 }
 
 .stacks{
-  float: right;
+  /* float: right; */
 }
 
 .history {
-  float: left;
+  /* float: left; */
   margin-top: '00px';
 }
