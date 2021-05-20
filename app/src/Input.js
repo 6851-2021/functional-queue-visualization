@@ -18,7 +18,7 @@ class InputComponent extends React.Component {
 
     handleEnqueue(event) { 
 	    const value = this.state.value;
-        this.props.push(value == '' ? '?' : value);
+        this.props.push(value === '' ? '?' : value);
         this.setState({value: ''});
     }
 

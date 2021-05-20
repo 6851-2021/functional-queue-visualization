@@ -15,17 +15,14 @@ class Graph extends React.Component {
 
     render() {
         const {
-            data,
             width,
             height,
-            events = false,
             margin = {
                 top: 30,
                 left: 30,
                 right: 30,
                 bottom: 30
-            }, 
-            root
+            }
         } = this.props;
             
         const innerWidth = width - margin.left - margin.right;
@@ -46,7 +43,7 @@ class Graph extends React.Component {
                         left={margin.left}
                         root={this.props.root}
                         size={[sizeWidth, sizeHeight]}
-                        separation={(a, b) => (a.parent == b.parent ? 1 : 0.5) / a.depth}
+                        separation={(a, b) => (a.parent === b.parent ? 1 : 0.5) / a.depth}
                     >
                         {({ data }) => (
                             <Group top={origin.y} left={origin.x}>

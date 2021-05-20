@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeftOutlined, ConsoleSqlOutlined, StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, StepBackwardOutlined, StepForwardOutlined } from '@ant-design/icons';
 import './App.css';
 import { Queue, Stack } from './functional';
 import { Select } from 'antd';
@@ -72,18 +72,18 @@ class StacksView extends React.Component {
         const stacks = stackNames.map(
             (name) => {
 
-                let enter = (move_type == 'PUSH' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[1] == name) || (move_type == 'BEGIN TRANSFER' && name == 'HEAD') || (move_type == 'END TRANSFER 1' && name == 'INS') || (move_type == 'END TRANSFER 2' && name == 'POP');
-                let exit = (move_type == 'POP' && move.stacks[0] == name) || (move_type == 'FLIP' && move.stacks[0] == name) || (move_type == 'END TRANSFER 3' && (name == 'POPrev' || name == 'HEAD' || name == 'INS2' || name == 'POP2'));
-                let copy = (move_type == 'BEGIN TRANSFER' && name == 'POP') || (move_type == 'END TRANSFER 1' && name == 'INS2') || (move_type == 'END TRANSFER 2' && name == 'POP2');
-                let onlyLast = (move_type == 'PUSH' || move_type == 'POP' || move_type == 'FLIP');
+                let enter = (move_type === 'PUSH' && move.stacks[0] === name) || (move_type === 'FLIP' && move.stacks[1] === name) || (move_type === 'BEGIN TRANSFER' && name === 'HEAD') || (move_type === 'END TRANSFER 1' && name === 'INS') || (move_type === 'END TRANSFER 2' && name === 'POP');
+                let exit = (move_type === 'POP' && move.stacks[0] === name) || (move_type === 'FLIP' && move.stacks[0] === name) || (move_type === 'END TRANSFER 3' && (name === 'POPrev' || name === 'HEAD' || name === 'INS2' || name === 'POP2'));
+                let copy = (move_type === 'BEGIN TRANSFER' && name === 'POP') || (move_type === 'END TRANSFER 1' && name === 'INS2') || (move_type === 'END TRANSFER 2' && name === 'POP2');
+                let onlyLast = (move_type === 'PUSH' || move_type === 'POP' || move_type === 'FLIP');
 
                 let s = exit ? move.old_queue[name] : move.new_queue[name];
 
                 const elements = s.listAllElements();
                 const elements_disp = elements.map((e, i) => {
-                    let isLast = (i == elements.length - 1);
+                    let isLast = (i === elements.length - 1);
                     let affected = !onlyLast || (onlyLast && isLast);
-                    let isHead = isLast && ((inTransferMode && name == "HEAD") || (!inTransferMode && name == "POP"));
+                    let isHead = isLast && ((inTransferMode && name === "HEAD") || (!inTransferMode && name === "POP"));
 
                     let fade_class = "";
                     let color = "white";
@@ -150,7 +150,7 @@ class StacksView extends React.Component {
                 </div>
                 <div >
                     {speed_select}
-                    {this.props.stepMode == "auto" && speed_slider}
+                    {this.props.stepMode === "auto" && speed_slider}
                 </div>
             </div>
         )

@@ -1,13 +1,3 @@
-const stackNames = ['INS', 'POP', 'POPrev', 'INS2', 'POP2', 'HEAD'];
-const stackNamesHTML = {
-    'INS': (<>INS</>),
-    'POP': (<>POP</>),
-    'POPrev': (<>POP<sub>rev</sub></>),
-    'POP2': (<>POP<sub>2</sub></>),
-    'INS2': (<>INS<sub>2</sub></>),
-    'HEAD': (<>HEAD</>)
-};
-
 const info_functional = (<>A functional data structure can never be modified. Instead,
 when performing an operation, a <i>new copy</i> of the data structure is returned.
 This implies a property called <i>full persistence</i>: previous versions of the data structure remain accessible

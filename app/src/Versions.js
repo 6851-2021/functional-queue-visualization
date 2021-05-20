@@ -21,10 +21,10 @@ class Versions extends React.Component {
 
             let code;            
             const left_classes = ( i === cur ? " current-queue" : "") + (ancs.includes(i) ? " anc-queue" : "");
-            const right_classes = (ancs.includes(i) || i == cur ? " anc-queue" : "");
+            const right_classes = (ancs.includes(i) || i === cur ? " anc-queue" : "");
             const left_queue = <span className={left_classes}>Q<sub>{i}</sub></span>;
             const right_queue = <span className={right_classes}>Q<sub>{parent}</sub></span>;
-            if (parent == -1) {
+            if (parent === -1) {
                 code = <> {left_queue} = EmptyQueue() </>
             } else if (Queue.size(this.props.queues[parent]) < Queue.size(q)) {
                 code = <> {left_queue} = Enqueue({right_queue}, {qelems[qelems.length - 1]}) </>
@@ -32,7 +32,7 @@ class Versions extends React.Component {
                 code = <> {left_queue} = Dequeue({right_queue}) </>
             }
 
-            const spanClass = "version-ref" + (i == cur || ancs.includes(i)  ? " current-version": "");
+            const spanClass = "version-ref" + (i === cur || ancs.includes(i)  ? " current-version": "");
 
             const fakeqelems = qelems.slice(1, qelems.length);
             let qelems_list = fakeqelems.join(", ");
@@ -52,7 +52,7 @@ class Versions extends React.Component {
             const version =
                 <div key={i} id={"version_" + i}>
                     <code className={spanClass} onClick={() => this.props.setVersion(i)}>
-                        > {code} <span style={{color: "grey"}}> {(i == cur || ancs.includes(i)) && qelems_elem}</span>
+                        > {code} <span style={{color: "grey"}}> {(i === cur || ancs.includes(i)) && qelems_elem}</span>
                     </code>
                 </div>;
             versions.push(version);
@@ -65,7 +65,7 @@ class Versions extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.props.cur == this.props.queues.length - 1 && this.props.queues.length != this.prevLength) {
+        if (this.props.cur === this.props.queues.length - 1 && this.props.queues.length !== this.prevLength) {
             const element = document.getElementById("version_" + this.props.cur);
 	    this.prevLength = this.props.queues.length;
             element.parentNode.scrollTop = element.offsetTop;

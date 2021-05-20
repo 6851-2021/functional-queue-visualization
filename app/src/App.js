@@ -36,9 +36,9 @@ class App extends React.Component {
         const ops = this.state.ops.concat([moves]);
         const parents = this.state.parents.concat([this.state.cur]);
         const num_moves = moves.length;
-        this.setState({ queues: queues, parents: parents, cur: queues.length - 1, ops: ops, moveNum: (this.state.stepMode == "end" ? num_moves - 1: 0)});
+        this.setState({ queues: queues, parents: parents, cur: queues.length - 1, ops: ops, moveNum: (this.state.stepMode === "end" ? num_moves - 1: 0)});
         clearInterval(this.interval);
-        if (this.state.stepMode == "auto") this.runAuto();
+        if (this.state.stepMode === "auto") this.runAuto();
 
         this.updateGraph(parentIdx, newIdx);
     }
@@ -87,7 +87,7 @@ class App extends React.Component {
     setVersion = (i) => {
         this.setState({cur: i, moveNum: 0});
         clearInterval(this.interval);
-        if (this.state.stepMode == "auto") this.runAuto();
+        if (this.state.stepMode === "auto") this.runAuto();
     }
 
     // only should be called for button presses, not internally
@@ -103,8 +103,8 @@ class App extends React.Component {
         this.setState({stepMode: stepMode});
         
         const numMoves = this.curOp().length;
-	    if (stepMode == "end") this.setState({moveNum: numMoves - 1});
-        else if (stepMode == "auto") {
+	    if (stepMode === "end") this.setState({moveNum: numMoves - 1});
+        else if (stepMode === "auto") {
             this.runAuto();
         }
     }
@@ -184,10 +184,10 @@ class App extends React.Component {
                 <div className="history">
                     <Row type="flex" align="middle" justify="center">
                         <Col span={4} offset={4}>
-                            <div class="title-h2"><h2> Version History </h2></div>
+                            <div className="title-h2"><h2> Version History </h2></div>
                         </Col>
                         <Col span={4}>
-                            <div class="toggleVersions"> 
+                            <div className="toggleVersions"> 
                                 <Switch onClick={(checked) => this.displayVersionView(checked)} checkedChildren="linear" unCheckedChildren="graph" defaultChecked />
                             </div>
                         </Col> 
