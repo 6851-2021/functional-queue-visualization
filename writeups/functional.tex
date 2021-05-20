@@ -27,7 +27,7 @@
 
 A functional data structure can never be modified. Instead, when performing an operation, a new copy of the data structure is returned. This implies a property called \emph{full persistence}: previous versions of the data structure remain accessible forever, and we can perform operations on any version we choose.
 
-\section{Functional Stacks}
+\section{Functional stacks}
 
 A functional stack is probably the simplest example of a functional data structure. It consists solely of a pointer to the head of a one-way linked list, which contains the stack’s elements from top to bottom. To push, we add a new element to the one-way linked list, and return the pointer to this new element. To pop, we return a pointer to the second element of the linked list.
 
