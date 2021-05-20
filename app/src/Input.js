@@ -37,7 +37,6 @@ class InputComponent extends React.Component {
             <Space direction="horizontal">
                 <Search
                     placeholder="input number to insert"
-                    allowClear
                     enterButton="Enqueue"
                     size="medium"
                     value={this.state.value}
