@@ -1,19 +1,17 @@
 import React from 'react';
+
+import { InfoOutlined } from '@ant-design/icons';
+import { Button, notification, Row, Col, Typography, Switch } from 'antd';
+import { hierarchy } from 'd3-hierarchy';
+
 import './App.css';
 import { InputComponent } from "./Input";
 import { StacksView } from "./StacksView";
 import { Queue } from './functional';
 import { Versions } from './Versions';
 import { Graph } from './Graph';
-import { InfoOutlined } from '@ant-design/icons';
-import { Button, notification, Row, Col, Typography, Switch } from 'antd';
 import { info_description } from './Info';
 
-import RadialTree from './RadialTree';
-import { render } from 'react-dom';
-
-import { hierarchy } from 'd3-hierarchy';
-import data from './data';
 const { Title } = Typography;
 class App extends React.Component {
 
@@ -171,7 +169,6 @@ class App extends React.Component {
             versionView = <Versions queues={this.state.queues} parents={this.state.parents} cur={this.state.cur} setVersion={this.setVersion}></Versions>;
         } else {
             versionView = <Graph data={this.graphData} width={600} height={400} setVersion={this.setVersion} queues={this.state.queues} cur={this.state.cur} root={this.root}/>;
-            // versionView = <RadialTree data={this.graphData} width={600} height={600} setVersion={this.setVersion} root={this.root}/>;
         }
 
         return (

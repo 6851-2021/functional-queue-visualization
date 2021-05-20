@@ -1,20 +1,18 @@
 import React, { Fragment } from 'react';
 import { Group } from '@vx/group';
+import { Tooltip } from 'antd';
 
 import Node from './Node';
 import { getTopLeft } from './utils';
-import { Tooltip } from 'antd';
 
-function Nodes({ nodes, layout, orientation, cur, onNodeClick, hover, onNodeMouseOver, onNodeMouseOut }) {
+function Nodes({ nodes, cur, onNodeClick, hover, onNodeMouseOver, onNodeMouseOut }) {
   return (
     <Fragment>
       { nodes.map((node, i) => (
-        <Group {...getTopLeft(node, layout, orientation)} key={i}>
+        <Group {...getTopLeft(node)} key={i}>
           <Tooltip title={"Q"+node.data.name} visible={hover===node.data.name?true:false} placement={"left"}>
           <Node
             node={node}
-            layout={layout}
-            orientation={orientation}
             cur = {cur}
             onClick={() => onNodeClick(node)}
             onMouseOver={() => onNodeMouseOver(node)}
