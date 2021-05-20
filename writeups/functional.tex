@@ -35,11 +35,11 @@ A functional stack is probably the simplest example of a functional data structu
 
 Functional queues are a natural next step. Ideally, we would like to implement them with a constant number of changes per enqueue/dequeue. This turns out to be much harder than for stacks! But there is a solution: using our functional stacks as a black box, we can simulate each queue operation using a constant number of operations on a set of six stacks. The primary goal of our visualizer is to show these operations in action, and how they come together to make a functional queue.
 
-\section{Outline of Implementation}
+\section{Outline of functional queue implementation}
 
 \subsection{Overview}
 
-We will represent our functional queue $\Q$ by a tuple $(\INS, \POP, \POP_{rev}, \POP_2, \INS_2,\HEAD, \n, \opsleft)$. Here, $\INS$, $\POP$, $\POP_{rev}$, $\POP_2$, $\INS_2$ and $\HEAD$ are functional stacks\footnote{semantically, $\HEAD$ is more like a pointer to a functional stack rather than an independent stack itself (it walks down the original $\POP$ stack during transfer mode)}, and $\n$ and $\opsleft$ are integers. When $\Q$ is created, all stacks are empty. 
+We will represent our functional queue $\Q$ by a tuple $(\INS, \POP, \POP_{rev}, \POP_2, \INS_2,\HEAD, \n, \opsleft)$. Here, $\INS$, $\POP$, $\POP_{rev}$, $\POP_2$, $\INS_2$ and $\HEAD$ are functional stacks, and $\n$ and $\opsleft$ are integers. When $\Q$ is created, all stacks are empty. 
 
 Broadly speaking, our queue $\Q$ works by maintaing a stack $\INS$ that contains the most recently added elements of $\Q$, and a stack $\POP$ that contains the remaining elements. $\INS$ keeps more recently added elements higher, whereas $\POP$ keeps less recently added elements higher. Thus, $\INS$ will allow for easy insertions into our queue, while $\POP$ will allow for easy pops from our queue. 
 
