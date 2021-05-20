@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Group } from '@vx/group';
 
-function Node({ node, cur, onClick }) {
+function Node({ node, cur, onClick, onMouseOver, onMouseOut }) {
   const width = 30;
   const height = 20;
   const inFocus = node.data.name===cur.toString();
@@ -21,6 +21,8 @@ function Node({ node, cur, onClick }) {
           rx={7} 
           ry={7}
           onClick={onClick}
+          onMouseOver={onMouseOver}
+          onMouseOut={onMouseOut}
         />
       )}
       <text

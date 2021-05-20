@@ -7,8 +7,6 @@ import { Tree } from '@vx/hierarchy';
 
 import Links from "./Links";
 import Nodes from "./Nodes";
-import { select } from 'd3-selection';
-import { NodeExpandOutlined } from '@ant-design/icons';
 
 class Graph extends React.Component {
 
@@ -17,6 +15,7 @@ class Graph extends React.Component {
         orientation: "vertical",
         linkType: "diagonal",
         stepPercent: 0.5,
+        hover: "",
     };
 
     render() {
@@ -52,7 +51,6 @@ class Graph extends React.Component {
         
         return (
             <div id="graph-div">
-                
                 <svg width={width} height={height}>
                 <LinearGradient id="lg" from="#fd9b93" to="#fe6e9e" />
                 {/* <rect width={width} height={height} rx={14} fill="#272b4d" /> */}
@@ -80,6 +78,16 @@ class Graph extends React.Component {
                         cur={this.props.cur}
                         onNodeClick={(node) => {
                             this.props.setVersion(node.id);
+                            this.forceUpdate();
+                        }}
+                        hover={this.state.hover}
+                        onNodeMouseOver={(node) => {
+                            console.log('hovering on', node.data.name);
+                            this.state.hover=node.data.name;
+                            this.forceUpdate();
+                        }}
+                        onNodeMouseOut={(node) => {
+                            this.state.hover="";
                             this.forceUpdate();
                         }}
                         />
