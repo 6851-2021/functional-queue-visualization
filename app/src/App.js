@@ -188,7 +188,7 @@ class App extends React.Component {
                         </Col>
                         <Col span={4}>
                             <div className="toggleVersions"> 
-                                <Switch onClick={(checked) => this.displayVersionView(checked)} checkedChildren="linear" unCheckedChildren="graph" defaultChecked />
+                                <Switch onClick={(checked) => this.displayVersionView(checked)} style={{backgroundColor:this.state.displayLinear ? "#1890ff" : "seagreen"}} checkedChildren="linear" unCheckedChildren="graph" defaultChecked />
                             </div>
                         </Col> 
                     </Row>

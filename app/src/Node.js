@@ -13,7 +13,7 @@ function Node({ node, cur, onClick, onMouseOver, onMouseOut }) {
           width={width}
           y={-height / 2}
           x={-width / 2}
-          fill={inFocus ? 'darkgreen' : '#d6dee1'}
+          fill={inFocus ? 'seagreen' : '#d6dee1'}
           stroke={"black"}
           strokeWidth={inFocus ? 2 : 1}
           strokeOpacity={inFocus ? 1 : 0.6}
