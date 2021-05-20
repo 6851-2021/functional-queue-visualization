@@ -1,0 +1,75 @@
+\documentclass[12.5pt]{scrartcl}
+\usepackage[sexy]{evan}
+\usepackage{fullpage}
+\usepackage{amsmath, amsfonts}
+\usepackage{biblatex}
+
+\addbibresource{refs.bib}
+
+\author{Gaurav Arya}
+\title{Functional Queues}
+
+\usepackage{url}
+
+\DeclareMathOperator{\INS}{\mathtt{INS}}
+\DeclareMathOperator{\POP}{\mathtt{POP}}
+\DeclareMathOperator{\HEAD}{\mathtt{HEAD}}
+\DeclareMathOperator{\opsleft}{\mathtt{ops\_left}}
+\DeclareMathOperator{\n}{\mathtt{n}}
+\DeclareMathOperator{\dd}{\mathtt{d}}
+\DeclareMathOperator{\Q}{\mathtt{Q}}
+
+\begin{document}
+
+\maketitle
+
+\section{Functional data structures}
+
+A functional data structure can never be modified. Instead, when performing an operation, a new copy of the data structure is returned. This implies a property called \emph{full persistence}: previous versions of the data structure remain accessible forever, and we can perform operations on any version we choose.
+
+\section{Functional Stacks}
+
+A functional stack is probably the simplest example of a functional data structure. It consists solely of a pointer to the head of a one-way linked list, which contains the stack’s elements from top to bottom. To push, we add a new element to the one-way linked list, and return the pointer to this new element. To pop, we return a pointer to the second element of the linked list.
+
+\section{What about a functional queue?}
+
+Functional queues are a natural next step. Ideally, we would like to implement them with a constant number of changes per enqueue/dequeue. This turns out to be much harder than for stacks! But there is a solution: using our functional stacks as a black box, we can simulate each queue operation using a constant number of operations on a set of six stacks. The primary goal of our visualizer is to show these operations in action, and how they come together to make a functional queue.
+
+\section{Outline of Implementation}
+
+\subsection{Overview}
+
+We will represent our functional queue $\Q$ by a tuple $(\INS, \POP, \POP_{rev}, \POP_2, \INS_2,\HEAD, \n, \opsleft)$. Here, $\INS$, $\POP$, $\POP_{rev}$, $\POP_2$, $\INS_2$ and $\HEAD$ are functional stacks\footnote{semantically, $\HEAD$ is more like a pointer to a functional stack rather than an independent stack itself (it walks down the original $\POP$ stack during transfer mode)}, and $\n$ and $\opsleft$ are integers. When $\Q$ is created, all stacks are empty. 
+
+Broadly speaking, our queue $\Q$ works by maintaing a stack $\INS$ that contains the most recently added elements of $\Q$, and a stack $\POP$ that contains the remaining elements. $\INS$ keeps more recently added elements higher, whereas $\POP$ keeps less recently added elements higher. Thus, $\INS$ will allow for easy insertions into our queue, while $\POP$ will allow for easy pops from our queue. 
+
+At any moment, $\Q$ is either in ``normal mode" or ``transfer mode". In normal mode, $\Q$ maintains the invariants above, and does not worry about the other stacks: inserted elements are placed into $\INS$\footnote{as a special case, however, when an element is inserted into an empty queue we place it directly into $\POP$.}, and deletions pop from $\POP$. In normal mode, operations are clearly $O(1)$, and as long as $\POP$ is non-empty these operations will be valid. 
+
+However, if the size $\n$ of $\INS$ becomes equal to the size of $\POP$, $\Q$ will switch into transfer mode for the next $2\n - \dd$ operations, where $\dd \geq 0$ is the number of deletions that occur during the transfer mode. At the end of transfer mode, all elements of $\INS$ will be moved into $\POP$. We now describe how this happens. 
+
+\subsection{Transfer Mode}
+
+\subsubsection{Initializing} To begin, $\HEAD$ points to the top of the $\POP$ stack, and $\POP_{rev}$, $\POP_2$, and $\INS_2$ are empty. We set $\opsleft$ to $2\n$, which will keep track of how many operations are left in transfer mode.
+
+\subsubsection{Passive operations} The following happens independent of the operation type. We always reduce $\opsleft$ by 1. For the first $n$ operations of transfer mode, we will:
+\begin{itemize}
+	\item Pop an element from $\POP$ and add it into $\POP_{rev}$.
+	\item Pop an element from $\INS$ and add it into $\POP_2$.
+\end{itemize}
+For the next $\n - \dd$ operations of transfer mode, we will pop an element from $\POP_{rev}$ and add it into $\POP_2$. We are able to tell when transfer mode ends by checking when $\opsleft$ is 0. Note that since we stop after $\n-d$ operations, we do not copy elements of $\POP_{rev}$ into $\POP_2$ if they have been deleted.     
+
+\subsubsection{Insertion} We simply place the element into $\INS_2$.
+
+\subsubsection{Deletion} First, we reduce $\opsleft$ by 1. Then, we move the $\HEAD$ pointer down by one (apply the tail operation to the stack it points to), and return the value it points to. Note that there can be at most $\n$ deletions before termination of transfer mode, and hence that we can always apply the tail operation.
+
+\subsubsection{Cleanup} At the end of transfer mode, $\POP_2$ has become the amalgation of the original $\INS$ and $\POP$, with elements in decreasing order of recency, as desired. Meanwhile, $\INS_2$ has collected all the elements that have been inserted during transfer mode. So we simply assign $\POP$ to $\POP_2$ and $\INS$ to $\INS_2$, and return to normal mode. Since transfer mode takes at most $2\n - \dd$ operations, $|\INS|$ is at most $|\POP| = 2\n - \dd$. This justifies our assumption that during normal mode $|\INS| \leq |\POP|$, and that transfer mode is triggered when $\INS$ grows in size to become equal in size to $\POP$. 
+
+\nocite{hood}
+
+\printbibliography
+
+\end{document}
+
+
+
+
