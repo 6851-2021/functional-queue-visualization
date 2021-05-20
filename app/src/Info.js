@@ -11,7 +11,7 @@ const stackNamesHTML = {
 const info_functional = (<>A functional data structure can never be modified. Instead,
 when performing an operation, a <i>new copy</i> of the data structure is returned.
 This implies a property called <i>full persistence</i>: previous versions of the data structure remain accessible
-forever, and we can perform operations on them.</>);
+forever, and we can perform operations on any version we choose.</>);
 const info_stacks = (<>A functional stack is probably the simplest example of a functional data
     structure. It consists solely of a pointer to the head of a one-way linked list,
     which contains the stack’s elements from top to bottom. To push, we add a new
