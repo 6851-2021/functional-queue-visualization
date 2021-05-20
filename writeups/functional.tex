@@ -62,7 +62,7 @@ For the next $\n - \dd$ operations of transfer mode, we will pop an element from
 
 \subsubsection{Deletion} First, we reduce $\opsleft$ by 1. Then, we move the $\HEAD$ pointer down by one (apply the tail operation to the stack it points to), and return the value it points to. Note that there can be at most $\n$ deletions before termination of transfer mode, and hence that we can always apply the tail operation.
 
-\subsubsection{Cleanup} At the end of transfer mode, $\POP_2$ has become the amalgation of the original $\INS$ and $\POP$, with elements in decreasing order of recency, as desired. Meanwhile, $\INS_2$ has collected all the elements that have been inserted during transfer mode. So we simply assign $\POP$ to $\POP_2$ and $\INS$ to $\INS_2$, and return to normal mode. Since transfer mode takes at most $2\n - \dd$ operations, $|\INS|$ is at most $|\POP| = 2\n - \dd$. This justifies our assumption that during normal mode $|\INS| \leq |\POP|$, and that transfer mode is triggered when $\INS$ grows in size to become equal in size to $\POP$. 
+\subsubsection{Cleanup} At the end of transfer mode, $\POP_2$ has become the amalgation of the original $\INS$ and $\POP$, with elements in decreasing order of recency, as desired. Meanwhile, $\INS_2$ has collected all the elements that have been inserted during transfer mode. So we simply assign $\POP$ to $\POP_2$ and $\INS$ to $\INS_2$, and return to normal mode. Since transfer mode lasts for $2\n - \dd$ operations, $|\INS|$ cannot exceed $|\POP| = 2\n - \dd$. This justifies our assumption that during normal mode $|\INS| \leq |\POP|$, and that transfer mode is triggered when $\INS$ grows in size to become equal in size to $\POP$. 
 
 \nocite{hood}
 
