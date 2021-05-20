@@ -231,7 +231,7 @@ code {
 } 
 
 .ant-notification-notice-description{
-  max-height: 800px;
+  max-height: 85vh;
   overflow-y: auto;
 }
 /* Hide scrollbar for Chrome, Safari and Opera */
