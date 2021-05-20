@@ -31,7 +31,6 @@ class StacksView extends React.Component {
         switch (move.move_type) {
             case 'PUSH':
                 let pushStack = move.stacks[0];
-                console.log(move.new_queue[pushStack]);
                 return (<>Push {move.val} onto <span className="stack-name-expl">{stackNamesHTML[pushStack]}</span></>);
             case 'POP':
                 let popStack = move.stacks[0];
@@ -66,7 +65,6 @@ class StacksView extends React.Component {
     render() {
         const move = this.props.move;
         const move_type = move.move_type;
-        console.log("move: ", move);
         const moveNum = this.props.moveNum;
         const numMoves = this.props.numMoves;
         const setMoveNum = this.props.setMoveNum;

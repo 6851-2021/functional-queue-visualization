@@ -35,7 +35,6 @@ class App extends React.Component {
         const queues = this.state.queues.concat([q]);
         const ops = this.state.ops.concat([moves]);
         const parents = this.state.parents.concat([this.state.cur]);
-        console.log("changes one-by-one", moves);
         const num_moves = moves.length;
         this.setState({ queues: queues, parents: parents, cur: queues.length - 1, ops: ops, moveNum: (this.state.stepMode == "end" ? num_moves - 1: 0)});
         clearInterval(this.interval);
@@ -46,7 +45,6 @@ class App extends React.Component {
     
     updateGraph = (parentIdx, newIdx) => {
         let parentNode = this.hashmap[parentIdx];
-        console.log('parent node is ', parentNode);
         
         var newNodeObj = {
             name: newIdx.toString(),
@@ -77,13 +75,11 @@ class App extends React.Component {
     enqueue = (val) => {
         const moves = [];
         const q = Queue.enqueue(this.curQueue(), val, moves);
-        console.log("just pushed. moves are", moves);
         this.updateQueue(q, moves);
     };
 
     dequeue = () => {
         const moves = [];
-	    console.log("head:", Queue.head(this.curQueue()));
         const q = Queue.dequeue(this.curQueue(), moves);
         this.updateQueue(q, moves);
     };
@@ -115,12 +111,10 @@ class App extends React.Component {
 
     setSpeed = (speed) => {
         this.setState({speed: speed});
-        console.log("new speed: ", speed);
     }
 
     runAuto = () => {
         const handleInterval = () => {
-            console.log("running");
             const numMoves = this.curOp().length;
             const moveNum = this.state.moveNum;
             if (moveNum + 1 < numMoves) {
