@@ -1,14 +1,20 @@
+# Functional Queue Visualization
+
+This project is a visualization of a purely functional queue data structure,
+implemented enqueue and dequeue operations in constant worst-case time using
+six stacks.
+
 ## Setup instructions
 
-First, make sure `Node.js` and `npm` are installed (https://www.npmjs.com/get-npm).
+First, make sure Node.js and `npm` (and optionally `yarn`) are installed (https://www.npmjs.com/get-npm).
 
-Once the repository is cloned/downloaded, navigate to the `/app` directory, run `npm install` to install any package dependencies, and then run `yarn start` to launch the application. The app should open at `localhost:3000` in your browser.
+Once the repository is cloned/downloaded, navigate to the `/app` directory, run `npm install` (or `yarn`) to install any package dependencies, and then run `npm start` (or `yarn start`) to launch the application. The app should open at `localhost:3000` in your browser.
 
 ## Documentation
 
-`writeups/writeup.pdf` is a writeup on the design of the functional queue visualizer.
+[`writeups/writeup.pdf`](writeups/writeup.pdf) is a writeup on the design of the functional queue visualizer.
 
-`writeups/functional.pdf` describes the specifics of our functional queue implementation.
+[`writeups/functional.pdf`](writeups/functional.pdf) describes the specifics of our functional queue implementation.
 
 ## Brief Introduction to Functional Queues
 
