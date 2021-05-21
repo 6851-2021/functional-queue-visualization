@@ -4,6 +4,14 @@ This project is a visualization of a purely functional queue data structure,
 implemented enqueue and dequeue operations in constant worst-case time using
 six stacks.
 
+## [Demo](https://6851-2021.github.io/functional-queue-visualization/)
+
+[Run the visualization in your browser!](https://6851-2021.github.io/functional-queue-visualization/)
+
+![screenshot](writeups/stacks.png)
+
+![screenshot](writeups/linear.png)
+
 ## Setup instructions
 
 First, make sure Node.js and `npm` (and optionally `yarn`) are installed (https://www.npmjs.com/get-npm).
