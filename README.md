@@ -1,7 +1,7 @@
 # Functional Queue Visualization
 
 This project is a visualization of a purely functional queue data structure,
-implemented enqueue and dequeue operations in constant worst-case time using
+implementing enqueue and dequeue operations in constant worst-case time using
 six stacks.
 
 ## [Demo](https://6851-2021.github.io/functional-queue-visualization/)
