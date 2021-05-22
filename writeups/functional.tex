@@ -56,13 +56,13 @@ However, if the size $\n$ of $\INS$ becomes equal to the size of $\POP$, $\Q$ wi
 	\item Pop an element from $\POP$ and add it into $\POP_{rev}$.
 	\item Pop an element from $\INS$ and add it into $\POP_2$.
 \end{itemize}
-For the next $\n - \dd$ operations of transfer mode, we will pop an element from $\POP_{rev}$ and add it into $\POP_2$. We are able to tell when transfer mode ends by checking when $\opsleft$ is 0. Note that since we stop after $\n-d$ operations, we do not copy elements of $\POP_{rev}$ into $\POP_2$ if they have been deleted.     
+For the next $\n - \dd$ operations of transfer mode, we will pop an element from $\POP_{rev}$ and add it into $\POP_2$. We are able to tell when transfer mode ends by checking when $\opsleft$ is 0. Note that since we stop after $\n-\dd$ operations, we do not copy elements of $\POP_{rev}$ into $\POP_2$ if they have been deleted.     
 
 \subsubsection{Insertion} We simply place the element into $\INS_2$.
 
 \subsubsection{Deletion} First, we reduce $\opsleft$ by 1. Then, we move the $\HEAD$ pointer down by one (apply the tail operation to the stack it points to), and return the value it points to. Note that there can be at most $\n$ deletions before termination of transfer mode, and hence that we can always apply the tail operation.
 
-\subsubsection{Cleanup} At the end of transfer mode, $\POP_2$ has become the amalgation of the original $\INS$ and $\POP$, with elements in decreasing order of recency, as desired. Meanwhile, $\INS_2$ has collected all the elements that have been inserted during transfer mode. So we simply assign $\POP$ to $\POP_2$ and $\INS$ to $\INS_2$, and return to normal mode. Since transfer mode lasts for $2\n - \dd$ operations, $|\INS|$ cannot exceed $|\POP| = 2\n - \dd$. This justifies our assumption that during normal mode $|\INS| \leq |\POP|$, and that transfer mode is triggered when $\INS$ grows in size to become equal in size to $\POP$. 
+\subsubsection{Cleanup} At the end of transfer mode, $\POP_2$ has become the amalgation of the original $\INS$ and $\POP$, with elements in decreasing order of recency, as desired. Meanwhile, $\INS_2$ has collected all the elements that have been inserted during transfer mode. So we simply assign $\POP$ to $\POP_2$ and $\INS$ to $\INS_2$, and return to normal mode. Note that transfer mode lasts for $2\n - \dd$ operations, and when it ends $\POP$ has size $2\n - \dd$. Thus, after transfer mode ends, the size of $\INS$ cannot exceed the size of $\POP$. This justifies our assumption that during normal mode $\INS$ has size at most the size of $\POP$, and that transfer mode is triggered when $\INS$ grows in size to become equal in size to $\POP$. 
 
 \nocite{hood}
 
